@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Welcome to the BBL !{% endblock %}
+
+{% block body %}
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item active">
+        <a class="nav-link" href="/">Home<span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="/types">Types</a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="/beers">Beers</a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="/breweries">Breweries</a>
+      </li>
+    </ul>
+  </div>
+
+  <div>Welcome to the Belgian Beers Land ! Enjoy your trip !</div>
+</nav>
+
+<div align="center"> This is the {{ controller_name }} page !
+<br>
+<br>
+La Belgique est reconnue mondialement en raison du nombre remarquable de bières produites
+sur son territoire ainsi que pour la variété de styles différents. Dans une visée pédagogique,
+nous avons classé les bières belges en quatorze catégories.
+<br>
+Apprenez les caractéristiques et l'histoire de chaque catégorie et découvrez diverses informations
+sur les bières (brasserie, taux d'alcool, catégorie, commentaire éventuel). Pour accéder à une bière,
+sélectionnez une catégorie ou bien consultez l'index complet. Vous pouvez également consulter une fiche de bière
+ en vous basant sur le critère de la brasserie.</div>
+
+{% endblock %}

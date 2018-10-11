@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\Brasserie;
+use App\Entity\Brewery;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * @method Brasserie|null find($id, $lockMode = null, $lockVersion = null)
- * @method Brasserie|null findOneBy(array $criteria, array $orderBy = null)
- * @method Brasserie[]    findAll()
- * @method Brasserie[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Brewery|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Brewery|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Brewery[]    findAll()
+ * @method Brewery[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class BrasserieRepository extends ServiceEntityRepository
+class BreweryRepository extends ServiceEntityRepository
 {
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, Brasserie::class);
+        parent::__construct($registry, Brewery::class);
     }
 
 //    /**
-//     * @return Brasserie[] Returns an array of Brasserie objects
+//     * @return Brewery[] Returns an array of Brewery objects
 //     */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class BrasserieRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?Brasserie
+    public function findOneBySomeField($value): ?Brewery
     {
         return $this->createQueryBuilder('b')
             ->andWhere('b.exampleField = :val')
