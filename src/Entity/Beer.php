@@ -19,16 +19,19 @@ class Beer
 
     /**
      * @ORM\Column(type="string", length=50)
+     * @Assert\NotBlank()
      */
     private $name;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Assert\NotBlank()
      */
     private $description;
 
     /**
      * @ORM\Column(type="float")
+     * @Assert\NotBlank()
      */
     private $volume;
 
@@ -36,6 +39,7 @@ class Beer
      * Many Beers have One Type.
      * @ORM\ManyToOne(targetEntity="Type", inversedBy="beers")
      * @ORM\JoinColumn(name="type_id", referencedColumnName="id")
+     * @Assert\NotBlank()
      */
     private $type;
 
@@ -43,6 +47,7 @@ class Beer
      * Many Beers have One Brewery.
      * @ORM\ManyToOne(targetEntity="Brewery", inversedBy="beers")
      * @ORM\JoinColumn(name="brewery_id", referencedColumnName="id")
+     * @Assert\NotBlank()
      */
     private $brewery;
 
@@ -83,6 +88,30 @@ class Beer
     public function setVolume(float $volume): self
     {
         $this->volume = $volume;
+
+        return $this;
+    }
+
+    public function getType(): ?Type
+    {
+        return $this->type;
+    }
+
+    public function setType(Type $type): self
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    public function getBrewery(): ?Brewery
+    {
+        return $this->brewery;
+    }
+
+    public function setBrewery(Brewery $brewery): self
+    {
+        $this->brewery = $brewery;
 
         return $this;
     }

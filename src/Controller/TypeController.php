@@ -7,6 +7,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use App\Entity\User;
+use App\Entity\Type;
+use App\Entity\Beer;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -43,14 +45,14 @@ class TypeController extends AbstractController
         $form->handleRequest($request);
         $task = $form->getData();
 
-        if ($form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
           $em = $this->getDoctrine()->getManager();
           $em->persist($task);
           $em->flush();
-          return new Response('The type is successfully added !');
+          return new Response('The type has been successfully added !');
         }
 
-        return $this->render('AcmeAccountBundle:Account:add_type.html.twig', array('controller_name' => 'AddTypeFunction', 'form' => $form->createView()));
+        return $this->render('type/add_type.html.twig', array('controller_name' => 'AddTypeFunction', 'form' => $form->createView()));
     }
 
 }

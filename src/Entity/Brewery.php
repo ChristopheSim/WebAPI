@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\BreweryRepository")
@@ -33,7 +34,7 @@ class Brewery
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      */
-    private $site_web;
+    private $website;
 
     /**
      * One Brewery has Many Beers.
@@ -71,14 +72,14 @@ class Brewery
         return $this;
     }
 
-    public function getSiteWeb(): ?string
+    public function getWebsite(): ?string
     {
-        return $this->site_web;
+        return $this->website;
     }
 
-    public function setSiteWeb(string $site_web): self
+    public function setWebsite(string $website): self
     {
-        $this->site_web = $site_web;
+        $this->website = $website;
 
         return $this;
     }
