@@ -6,11 +6,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use App\Entity\User;
 use App\Entity\Brewery;
 use App\Entity\Beer;
+use App\Form\BreweryType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class BreweryController extends AbstractController
 {
@@ -32,16 +34,7 @@ class BreweryController extends AbstractController
         // just setup a fresh $task object (remove the dummy data)
         $brewery = new Brewery();
 
-        $form = $this->createFormBuilder($brewery)
-          ->add('name', TextType::class, array('label' => 'Name'))
-          ->add('description', TextType::class, array('label' => 'Description'))
-          ->add('website', TextType::class, array('label' => 'Website'))
-          ->add('beers', EntityType::class, array(
-            'label' => 'Beers',
-            'class' => Beer::class,
-            'choice_label' => 'beers'))
-          ->add('save', SubmitType::class, array('label' => 'Save'))
-          ->getForm();
+        $form = $this->createForm(BreweryType::class, $brewery);
 
         $form->handleRequest($request);
         $task = $form->getData();
@@ -53,6 +46,6 @@ class BreweryController extends AbstractController
           return new Response('The brewery has been successfully added !');
         }
 
-        return $this->render('brewery/add_brewery.html.twig', array('controller_name' => 'AddTypeFunction', 'form' => $form->createView()));
+        return $this->render('brewery/add_brewery.html.twig', array('controller_name' => 'AddBreweryFunction', 'form' => $form->createView()));
     }
 }

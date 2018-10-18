@@ -6,11 +6,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use App\Entity\User;
 use App\Entity\Type;
 use App\Entity\Beer;
+use App\Form\TypeType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class TypeController extends AbstractController
 {
@@ -32,15 +34,7 @@ class TypeController extends AbstractController
         // just setup a fresh $task object (remove the dummy data)
         $type = new Type();
 
-        $form = $this->createFormBuilder($type)
-          ->add('name', TextType::class, array('label' => 'Name'))
-          ->add('description', TextType::class, array('label' => 'Description'))
-          ->add('beers', EntityType::class, array(
-            'label' => 'Beers',
-            'class' => Beer::class,
-            'choice_label' => 'beers'))
-          ->add('save', SubmitType::class, array('label' => 'Save'))
-          ->getForm();
+        $form = $this->createForm(TypeType::class, $type);
 
         $form->handleRequest($request);
         $task = $form->getData();

@@ -39,7 +39,6 @@ class Beer
      * Many Beers have One Type.
      * @ORM\ManyToOne(targetEntity="Type", inversedBy="beers")
      * @ORM\JoinColumn(name="type_id", referencedColumnName="id")
-     * @Assert\NotBlank()
      */
     private $type;
 
@@ -47,7 +46,6 @@ class Beer
      * Many Beers have One Brewery.
      * @ORM\ManyToOne(targetEntity="Brewery", inversedBy="beers")
      * @ORM\JoinColumn(name="brewery_id", referencedColumnName="id")
-     * @Assert\NotBlank()
      */
     private $brewery;
 

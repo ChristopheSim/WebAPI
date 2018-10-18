@@ -39,7 +39,6 @@ class Brewery
     /**
      * One Brewery has Many Beers.
      * @ORM\OneToMany(targetEntity="Beer", mappedBy="brewery")
-     * @Assert\NotBlank()
      */
     private $beers;
 
@@ -93,14 +92,14 @@ class Brewery
         return $this->beers;
     }
 
-    public function addBeer(? Beer $beer): self
+    public function addBeer(?Beer $beer): self
     {
         $this->beers[] = $beer;
 
         return $this;
     }
 
-    public function removeBeer(? Beer $beer): self
+    public function removeBeer(?Beer $beer): self
     {
         $index = array_search($beer, $this->beers);
         if ( $index !== false ) {

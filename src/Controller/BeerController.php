@@ -6,12 +6,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use App\Entity\User;
 use App\Entity\Type;
 use App\Entity\Beer;
 use App\Entity\Brewery;
+use App\Form\BeerType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class BeerController extends AbstractController
 {
@@ -33,20 +34,7 @@ class BeerController extends AbstractController
         // just setup a fresh $task object (remove the dummy data)
         $beer = new Beer();
 
-        $form = $this->createFormBuilder($beer)
-          ->add('name', TextType::class, array('label' => 'Name'))
-          ->add('description', TextType::class, array('label' => 'Description'))
-          ->add('volume', TextType::class, array('label' => 'Volume'))
-          ->add('type', EntityType::class, array(
-            'label' => 'Type',
-            'class' => Type::class,
-            'choice_label' => 'type'))
-            ->add('brewery', EntityType::class, array(
-              'label' => 'Brewery',
-              'class' => Brewery::class,
-              'choice_label' => 'brewery'))
-          ->add('save', SubmitType::class, array('label' => 'Save'))
-          ->getForm();
+        $form = $this->createForm(BeerType::class, $beer);
 
         $form->handleRequest($request);
         $task = $form->getData();
