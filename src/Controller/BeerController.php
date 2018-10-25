@@ -21,8 +21,10 @@ class BeerController extends AbstractController
      */
     public function indexAction()
     {
+        $beers = $this->getDoctrine()->getRepository(Beer::class)->findAll();
         return $this->render('beer/index.html.twig', [
             'controller_name' => 'BeerController',
+            'beers' => $beers,
         ]);
     }
 
@@ -46,6 +48,56 @@ class BeerController extends AbstractController
           return new Response('The beer has been successfully added !');
         }
 
-        return $this->render('beer/add_beer.html.twig', array('controller_name' => 'AddTypeFunction', 'form' => $form->createView()));
+        return $this->render('beer/add_beer.html.twig', array('controller_name' => 'AddBeerFunction', 'form' => $form->createView()));
+    }
+
+
+    /**
+     * @Route("/beers/update_beer/{id}", name="update_beer")
+     */
+    public function updateBeerAction(Request $request, $id)
+    {
+        // just setup a fresh $task object (remove the dummy data)
+        $entityManager = $this->getDoctrine()->getManager();
+        $beer = $entityManager->getRepository(Beer::class)->find($id);
+
+        if (!$beer) {
+          throw $this->createNotFoundException(
+              'No beer found for this id '.$id
+            );
+        }
+        $form = $this->createForm(BeerType::class, $beer);
+
+        $form->handleRequest($request);
+        $task = $form->getData();
+
+        if ($form->isSubmitted() && $form->isValid()) {
+          $entityManager = $this->getDoctrine()->getManager();
+          $entityManager->persist($task);
+          $entityManager->flush();
+          return new Response('The beer has been successfully added !');
+        }
+        return $this->render('beer/add_beer.html.twig', array('controller_name' => 'UpdateBeerFunction', 'form' => $form->createView()));
+    }
+
+
+    /**
+     * @Route("/beers/delete_beer/{id}", name="delete_beer")
+     */
+    public function deleteBeerAction(Request $request, $id)
+    {
+        // just setup a fresh $task object (remove the dummy data)
+        $entityManager = $this->getDoctrine()->getManager();
+        $beer = $entityManager->getRepository(Beer::class)->find($id);
+
+        if (!$beer) {
+          throw $this->createNotFoundException(
+              'No beers found for this id '.$id
+            );
+          }
+
+        $entityManager->remove($beer);
+        $entityManager->flush();
+        return $this->render('beer/delete_beer.html.twig', array('controller_name' => 'DeleteBeerFunction', 'explications' => "The beer has been successfully deleted !"));
     }
 }

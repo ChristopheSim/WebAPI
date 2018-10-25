@@ -25,6 +25,35 @@
 
   <div align="center"> This is the {{ controller_name }} page !</div>
 
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">id</th>
+        <th scope="col">Name</th>
+        <th scope="col">Description</th>
+        <th scope="col">Website</th>
+        <th scope="col">Beers</th>
+        <th scope="col"></th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for elem in breweries %}
+      <tr>
+        <th scope="row">{{ elem.getId() }}</th>
+        <td>{{ elem.getName() }}</td>
+        <td>{{ elem.getDescription() }}</td>
+        <td>{{ elem.getWebsite() }}</td>
+        <td>{%for beer in elem.getBeers() %}
+            {{ beer.getName() }} <br />
+            {% endfor %}</td>
+        <td><a href="/breweries/update_brewery/{{ elem.getId() }}><button type="button" class="btn btn-warning">Update</button></td>
+        <td><a href="/breweries/delete_brewery/{{ elem.getId() }}><button type="button" class="btn btn-warning">Delete</button></td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
   <div class="button" align="right">
     <a href="/breweries/add_brewery"><button type="button" class="btn btn-warning">Add a brewery</button></a>
   </div>

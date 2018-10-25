@@ -21,8 +21,10 @@ class TypeController extends AbstractController
      */
     public function indexAction()
     {
+        $types = $this->getDoctrine()->getRepository(Type::class)->findAll();
         return $this->render('type/index.html.twig', [
             'controller_name' => 'TypeController',
+            'types' => $types,
         ]);
     }
 
@@ -49,4 +51,52 @@ class TypeController extends AbstractController
         return $this->render('type/add_type.html.twig', array('controller_name' => 'AddTypeFunction', 'form' => $form->createView()));
     }
 
+
+    /**
+     * @Route("/types/update_type/{id}", name="update_type")
+     */
+    public function updateTypeAction(Request $request, $id)
+    {
+        // just setup a fresh $task object (remove the dummy data)
+        $entityManager = $this->getDoctrine()->getManager();
+        $type = $entityManager->getRepository(Type::class)->find($id);
+
+        if (!$type) {
+          throw $this->createNotFoundException(
+              'No type found for this id '.$id
+            );
+        }
+        $form = $this->createForm(TypeType::class, $type);
+
+        $form->handleRequest($request);
+        $task = $form->getData();
+
+        if ($form->isSubmitted() && $form->isValid()) {
+          $entityManager = $this->getDoctrine()->getManager();
+          $entityManager->persist($task);
+          $entityManager->flush();
+          return new Response('The type has been successfully updated !');
+        }
+        return $this->render('type/add_type.html.twig', array('controller_name' => 'UpdateTypeFunction', 'form' => $form->createView()));
+    }
+
+    /**
+     * @Route("/types/delete_type/{id}", name="delete_type")
+     */
+    public function deleteTypeAction(Request $request, $id)
+    {
+        // just setup a fresh $task object (remove the dummy data)
+        $entityManager = $this->getDoctrine()->getManager();
+        $type = $entityManager->getRepository(Type::class)->find($id);
+
+        if (!$type) {
+          throw $this->createNotFoundException(
+              'No type found for this id '.$id
+            );
+          }
+
+        $entityManager->remove($type);
+        $entityManager->flush();
+        return $this->render('type/delete_type.html.twig', array('controller_name' => 'DeleteTypeFunction', 'explications' => "The type has been successfully deleted !"));
+    }
 }

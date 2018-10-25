@@ -25,6 +25,33 @@
 
   <div align="center"> This is the {{ controller_name }} page !</div>
 
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">id</th>
+        <th scope="col">Name</th>
+        <th scope="col">Description</th>
+        <th scope="col">Beers</th>
+        <th scope="col"></th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for elem in types %}
+      <tr>
+        <th scope="row">{{ elem.getId() }}</th>
+        <td>{{ elem.getName() }}</td>
+        <td>{{ elem.getDescription() }}</td>
+        <td>{%for beer in elem.getBeers() %}
+            {{ beer.getName() }} <br />
+            {% endfor %}</td>
+        <td><a href="/types/update_type/{{ elem.getId() }}><button type="button" class="btn btn-warning">Update</button></td>
+        <td><a href="/types/delete_type/{{ elem.getId() }}><button type="button" class="btn btn-warning">Delete</button></td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
   <div class="button" align="right">
     <a href="/types/add_type"><button type="button" class="btn btn-warning">Add a type of beer</button></a>
   </div>

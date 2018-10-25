@@ -4,7 +4,9 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\PersistentCollection;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\BreweryRepository")
@@ -87,7 +89,7 @@ class Brewery
         $this->beers = new ArrayCollection();
     }
 
-    public function getBeers(): ?ArrayCollection
+    public function getBeers(): ?Collection
     {
         return $this->beers;
     }
