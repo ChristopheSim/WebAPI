@@ -25,6 +25,15 @@ class BreweryControllerAPI extends AbstractController
      */
     public function indexAction()
     {
+        if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS')
+        {
+            $response = new Response();
+            $response->headers->set('Access-Control-Allow-Origin', '*');
+            $response->headers->set('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
+
+            return $response;
+        }
+
         $normalizer = new ObjectNormalizer();
         $normalizer->setCircularReferenceLimit(1);
         $normalizer->setCircularReferenceHandler(function ($object) {
@@ -96,6 +105,15 @@ class BreweryControllerAPI extends AbstractController
     public function updateBreweryAction(Request $request, $id)
     {
         // just setup a fresh $task object (remove the dummy data)
+        if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS')
+        {
+            $response = new Response();
+            $response->headers->set('Access-Control-Allow-Origin', '*');
+            $response->headers->set('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
+
+            return $response;
+        }
+
         $entityManager = $this->getDoctrine()->getManager();
         $brewery = $entityManager->getRepository(Brewery::class)->find($id);
 
@@ -104,19 +122,6 @@ class BreweryControllerAPI extends AbstractController
               'No brewery found for this id '.$id
             );
         }
-
-        $form = $this->createForm(BreweryType::class, $brewery);
-
-        $form->handleRequest($request);
-        $task = $form->getData();
-
-        if ($form->isSubmitted() && $form->isValid()) {
-          $entityManager = $this->getDoctrine()->getManager();
-          $entityManager->persist($task);
-          $entityManager->flush();
-          return new Response('The brewery has been successfully updated !');
-        }
-        return $this->render('brewery/add_brewery.html.twig', array('controller_name' => 'UpdateBreweryFunction', 'form' => $form->createView()));
     }
 
 
@@ -126,6 +131,15 @@ class BreweryControllerAPI extends AbstractController
     public function deleteBreweryAction(Request $request, $id)
     {
         // just setup a fresh $task object (remove the dummy data)
+        if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS')
+        {
+            $response = new Response();
+            $response->headers->set('Access-Control-Allow-Origin', '*');
+            $response->headers->set('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
+
+            return $response;
+        }
+
         $entityManager = $this->getDoctrine()->getManager();
         $brewery = $entityManager->getRepository(Brewery::class)->find($id);
 
@@ -137,6 +151,6 @@ class BreweryControllerAPI extends AbstractController
 
         $entityManager->remove($brewery);
         $entityManager->flush();
-        return $this->render('brewery/delete_brewery.html.twig', array('controller_name' => 'DeleteBreweryFunction', 'explications' => "The brewery has been successfully deleted !"));
+        return new Response("The brewery was successfully deleted !");
     }
 }

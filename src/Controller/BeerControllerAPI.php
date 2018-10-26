@@ -25,6 +25,15 @@ class BeerControllerAPI extends AbstractController
      */
     public function indexAction()
     {
+        if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS')
+        {
+            $response = new Response();
+            $response->headers->set('Access-Control-Allow-Origin', '*');
+            $response->headers->set('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
+
+            return $response;
+        }
+
         $normalizer = new ObjectNormalizer();
         $normalizer->setCircularReferenceLimit(1);
         $normalizer->setCircularReferenceHandler(function ($object) {
@@ -40,6 +49,7 @@ class BeerControllerAPI extends AbstractController
         $response->setContent($jsonContent);
         return $response;
     }
+
 
     /**
      * @Route("/api/beers/add_beer", name="api_add_beer", methods={"POST"}))
@@ -70,12 +80,14 @@ class BeerControllerAPI extends AbstractController
         $type = $this->getDoctrine()
             ->getRepository(Type::class)
             ->find($content['id_type']);
+
         if (!$type) {
           throw $this->createNotFoundException(
             'No type found for this type id '.$content['id_type']
             );
         }
         $beer->setType($type);
+
         $brewery = $this->getDoctrine()
             ->getRepository(Brewery::class)
             ->find($content['id_brewery']);
@@ -103,26 +115,23 @@ class BeerControllerAPI extends AbstractController
     public function updateBeerAction(Request $request, $id)
     {
         // just setup a fresh $task object (remove the dummy data)
+        if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS')
+        {
+            $response = new Response();
+            $response->headers->set('Access-Control-Allow-Origin', '*');
+            $response->headers->set('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
+
+            return $response;
+        }
+
         $entityManager = $this->getDoctrine()->getManager();
         $beer = $entityManager->getRepository(Beer::class)->find($id);
 
         if (!$beer) {
           throw $this->createNotFoundException(
-              'No beer found for this id '.$id
-            );
+            'No beer found for this id '.$id
+          );
         }
-        $form = $this->createForm(BeerType::class, $beer);
-
-        $form->handleRequest($request);
-        $task = $form->getData();
-
-        if ($form->isSubmitted() && $form->isValid()) {
-          $entityManager = $this->getDoctrine()->getManager();
-          $entityManager->persist($task);
-          $entityManager->flush();
-          return new Response('The beer has been successfully added !');
-        }
-        return $this->render('beer/add_beer.html.twig', array('controller_name' => 'UpdateBeerFunction', 'form' => $form->createView()));
     }
 
 
@@ -132,17 +141,26 @@ class BeerControllerAPI extends AbstractController
     public function deleteBeerAction(Request $request, $id)
     {
         // just setup a fresh $task object (remove the dummy data)
+        if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS')
+        {
+            $response = new Response();
+            $response->headers->set('Access-Control-Allow-Origin', '*');
+            $response->headers->set('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
+
+            return $response;
+        }
+
         $entityManager = $this->getDoctrine()->getManager();
         $beer = $entityManager->getRepository(Beer::class)->find($id);
 
         if (!$beer) {
           throw $this->createNotFoundException(
-              'No beers found for this id '.$id
+              'No beer found for this id '.$id
             );
           }
 
         $entityManager->remove($beer);
         $entityManager->flush();
-        return $this->render('beer/delete_beer.html.twig', array('controller_name' => 'DeleteBeerFunction', 'explications' => "The beer has been successfully deleted !"));
+        return new Response("The beer was successfully deleted !");
     }
 }

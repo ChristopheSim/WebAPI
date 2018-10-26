@@ -25,6 +25,15 @@ class TypeControllerAPI extends AbstractController
      */
     public function indexAction()
     {
+        if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS')
+        {
+            $response = new Response();
+            $response->headers->set('Access-Control-Allow-Origin', '*');
+            $response->headers->set('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
+
+            return $response;
+        }
+
         $normalizer = new ObjectNormalizer();
         $normalizer->setCircularReferenceLimit(1);
         $normalizer->setCircularReferenceHandler(function ($object) {
@@ -95,6 +104,15 @@ class TypeControllerAPI extends AbstractController
     public function updateTypeAction(Request $request, $id)
     {
         // just setup a fresh $task object (remove the dummy data)
+        if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS')
+        {
+            $response = new Response();
+            $response->headers->set('Access-Control-Allow-Origin', '*');
+            $response->headers->set('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
+
+            return $response;
+        }
+
         $entityManager = $this->getDoctrine()->getManager();
         $type = $entityManager->getRepository(Type::class)->find($id);
 
@@ -103,18 +121,6 @@ class TypeControllerAPI extends AbstractController
               'No type found for this id '.$id
             );
         }
-        $form = $this->createForm(TypeType::class, $type);
-
-        $form->handleRequest($request);
-        $task = $form->getData();
-
-        if ($form->isSubmitted() && $form->isValid()) {
-          $entityManager = $this->getDoctrine()->getManager();
-          $entityManager->persist($task);
-          $entityManager->flush();
-          return new Response('The type has been successfully updated !');
-        }
-        return $this->render('type/add_type.html.twig', array('controller_name' => 'UpdateTypeFunction', 'form' => $form->createView()));
     }
 
     /**
@@ -123,6 +129,15 @@ class TypeControllerAPI extends AbstractController
     public function deleteTypeAction(Request $request, $id)
     {
         // just setup a fresh $task object (remove the dummy data)
+        if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS')
+        {
+            $response = new Response();
+            $response->headers->set('Access-Control-Allow-Origin', '*');
+            $response->headers->set('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
+
+            return $response;
+        }
+
         $entityManager = $this->getDoctrine()->getManager();
         $type = $entityManager->getRepository(Type::class)->find($id);
 
@@ -134,6 +149,6 @@ class TypeControllerAPI extends AbstractController
 
         $entityManager->remove($type);
         $entityManager->flush();
-        return $this->render('type/delete_type.html.twig', array('controller_name' => 'DeleteTypeFunction', 'explications' => "The type has been successfully deleted !"));
+        return new Response("The type was successfully deleted !");
     }
 }
