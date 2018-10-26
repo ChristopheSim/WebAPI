@@ -96,6 +96,7 @@ class BeerControllerAPI extends AbstractController
             'No type found for this brewery id '.$content['id_brewery']
             );
         }
+        $beer->setBrewery($brewery);
 
         if (!$beer) {
             return new Response("Error: beer creation aborted !");
@@ -104,7 +105,7 @@ class BeerControllerAPI extends AbstractController
             $em = $this->getDoctrine()->getManager();
             $em->persist($beer);
             $em->flush();
-            return new Response("The beer was successfully added !");
+            return new Response("The beer has been successfully added !");
         }
     }
 

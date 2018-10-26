@@ -73,14 +73,13 @@ class TypeControllerAPI extends AbstractController
         $type->setName($content["name"]);
         $type->setDescription($content["description"]);
 
-        $beer = new Beer();
-        foreach ($content["beers"] as &$id_beer) {
-          $beer = $this->getDoctrine()
-            ->getRepository(Beer::class)
-            ->find($id_beer);
+// Not working ! Beer found, added to list beers but no link... Why ?
+        foreach ($content["beers"] as $id) {
+          $em = $this->getDoctrine()->getManager();
+          $beer = $this->getRepository(Beer::class)->find($id);
           if (!$beer) {
             throw $this->createNotFoundException(
-              'No beer found for this beer id '.$id_beer
+              'No beer found for this beer id '.$id
             );
           }
           $type->addBeer($beer);
@@ -93,7 +92,7 @@ class TypeControllerAPI extends AbstractController
             $em = $this->getDoctrine()->getManager();
             $em->persist($type);
             $em->flush();
-            return new Response("The type was successfully added !");
+            return new Response("The type has been successfully added !");
         }
     }
 

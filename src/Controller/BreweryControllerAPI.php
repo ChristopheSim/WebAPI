@@ -74,14 +74,13 @@ class BreweryControllerAPI extends AbstractController
         $brewery->setDescription($content["description"]);
         $brewery->setWebsite($content["website"]);
 
-        $beer = new Beer();
-        foreach ($content["beers"] as &$id_beer) {
-          $beer = $this->getDoctrine()
-            ->getRepository(Beer::class)
-            ->find($id_beer);
+// Not working ! Beer found, added to list beers but no link... Why ?
+        foreach ($content["beers"] as $id) {
+          $em = $this->getDoctrine()->getManager();
+          $beer = $em->getRepository(Beer::class)->find($id);
           if (!$beer) {
             throw $this->createNotFoundException(
-              'No beer found for this beer id '.$id_beer
+              'No beer found for this beer id '.$id
             );
           }
           $brewery->addBeer($beer);
@@ -94,7 +93,7 @@ class BreweryControllerAPI extends AbstractController
             $em = $this->getDoctrine()->getManager();
             $em->persist($brewery);
             $em->flush();
-            return new Response("The brewery was successfully added !");
+            return new Response("The brewery has been successfully added !");
         }
     }
 
