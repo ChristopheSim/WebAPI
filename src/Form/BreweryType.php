@@ -25,6 +25,7 @@ class BreweryType extends AbstractType
               'label' => 'Beers',
               'class' => Beer::class,
               'choice_label' => 'name',
+              'required' => false,
               'expanded'=>false,
               'multiple'=>true))
             ->add('save', SubmitType::class, array('label' => 'Save'))
