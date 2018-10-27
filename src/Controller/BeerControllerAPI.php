@@ -125,13 +125,49 @@ class BeerControllerAPI extends AbstractController
             return $response;
         }
 
-        $entityManager = $this->getDoctrine()->getManager();
-        $beer = $entityManager->getRepository(Beer::class)->find($id);
+        $json = $request->getContent();
+        $content = json_decode($json, true);
+
+        $beer = $this->getDoctrine()
+            ->getRepository(Beer::class)
+            ->find($id);
+
+        $type = new Type();
+        $brewery = new Brewery();
+
+        $beer->setName($content["name"]);
+        $beer->setDescription($content["description"]);
+        $beer->setVolume($content["volume"]);
+
+        $type = $this->getDoctrine()
+            ->getRepository(Type::class)
+            ->find($content['id_type']);
+
+        if (!$type) {
+          throw $this->createNotFoundException(
+            'No type found for this type id '.$content['id_type']
+            );
+        }
+        $beer->setType($type);
+
+        $brewery = $this->getDoctrine()
+            ->getRepository(Brewery::class)
+            ->find($content['id_brewery']);
+        if (!$brewery) {
+          throw $this->createNotFoundException(
+            'No brewery found for this brewery id '.$content['id_brewery']
+            );
+        }
+        $beer->setBrewery($brewery);
 
         if (!$beer) {
-          throw $this->createNotFoundException(
-            'No beer found for this id '.$id
-          );
+            return new Response("Error: beer update aborted !");
+        }
+        else {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($beer);
+            $em->flush();
+            return new Response("The beer has been successfully updated !");
         }
     }
 

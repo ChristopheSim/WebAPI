@@ -74,12 +74,12 @@ class TypeControllerAPI extends AbstractController
         $type->setDescription($content["description"]);
 
 // Not working ! Beer found, added to list beers but no link... Why ?
-        foreach ($content["beers"] as $id) {
+        foreach ($content["beers"] as $beer_id) {
           $em = $this->getDoctrine()->getManager();
-          $beer = $this->getRepository(Beer::class)->find($id);
+          $beer = $this->getRepository(Beer::class)->find($beer_id);
           if (!$beer) {
             throw $this->createNotFoundException(
-              'No beer found for this beer id '.$id
+              'No beer found for this beer id '.$beer_id
             );
           }
           $type->addBeer($beer);
@@ -112,13 +112,36 @@ class TypeControllerAPI extends AbstractController
             return $response;
         }
 
-        $entityManager = $this->getDoctrine()->getManager();
-        $type = $entityManager->getRepository(Type::class)->find($id);
+        $json = $request->getContent();
+        $content = json_decode($json, true);
+
+        $type = $this->getDoctrine()
+            ->getRepository(Type::class)
+            ->find($id);
+
+        $type->setName($content["name"]);
+        $type->setDescription($content["description"]);
+
+// Not working ! Beer found, added to list beers but no link... Why ?
+        foreach ($content["beers"] as $beer_id) {
+          $em = $this->getDoctrine()->getManager();
+          $beer = $this->getRepository(Beer::class)->find($beer_id);
+          if (!$beer) {
+            throw $this->createNotFoundException(
+              'No beer found for this beer id '.$beer_id
+            );
+          }
+          $type->addBeer($beer);
+        }
 
         if (!$type) {
-          throw $this->createNotFoundException(
-              'No type found for this id '.$id
-            );
+            return new Response("Error: type creation aborted !");
+        }
+        else {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($type);
+            $em->flush();
+            return new Response("The type has been successfully updated !");
         }
     }
 

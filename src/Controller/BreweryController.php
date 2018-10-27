@@ -45,7 +45,11 @@ class BreweryController extends AbstractController
           $em = $this->getDoctrine()->getManager();
           $em->persist($task);
           $em->flush();
-          return new Response('The brewery has been successfully added !');
+          $this->addFlash(
+            'notice',
+            'The brewery has been successfully added !'
+          );
+          return $this->redirectToRoute("breweries");
         }
 
         return $this->render('brewery/add_brewery.html.twig', array('controller_name' => 'AddBreweryFunction', 'form' => $form->createView()));
@@ -76,7 +80,11 @@ class BreweryController extends AbstractController
           $entityManager = $this->getDoctrine()->getManager();
           $entityManager->persist($task);
           $entityManager->flush();
-          return new Response('The brewery has been successfully updated !');
+          $this->addFlash(
+            'notice',
+            'The brewery has been successfully updated !'
+          );
+          return $this->redirectToRoute("breweries");
         }
         return $this->render('brewery/add_brewery.html.twig', array('controller_name' => 'UpdateBreweryFunction', 'form' => $form->createView()));
     }
@@ -99,6 +107,10 @@ class BreweryController extends AbstractController
 
         $entityManager->remove($brewery);
         $entityManager->flush();
-        return $this->render('brewery/delete_brewery.html.twig', array('controller_name' => 'DeleteBreweryFunction', 'explications' => "The brewery has been successfully deleted !"));
+        $this->addFlash(
+          'notice',
+          'The brewery has been successfully deleted !'
+        );
+        return $this->redirectToRoute("breweries");
     }
 }

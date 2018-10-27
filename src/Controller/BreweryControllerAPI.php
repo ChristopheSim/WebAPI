@@ -74,23 +74,25 @@ class BreweryControllerAPI extends AbstractController
         $brewery->setDescription($content["description"]);
         $brewery->setWebsite($content["website"]);
 
+        $em = $this->getDoctrine()->getManager();
+
 // Not working ! Beer found, added to list beers but no link... Why ?
-        foreach ($content["beers"] as $id) {
-          $em = $this->getDoctrine()->getManager();
-          $beer = $em->getRepository(Beer::class)->find($id);
+        foreach ($content["beers"] as $beer_id) {
+          $beer = $em->getRepository(Beer::class)->find($beer_id);
           if (!$beer) {
             throw $this->createNotFoundException(
-              'No beer found for this beer id '.$id
+              'No beer found for this beer id '.$beer_id
             );
           }
-          $brewery->addBeer($beer);
+          else {
+            $brewery->addBeer($beer);
+          }
         }
 
         if (!$brewery) {
             return new Response("Error: brewery creation aborted !");
         }
         else {
-            $em = $this->getDoctrine()->getManager();
             $em->persist($brewery);
             $em->flush();
             return new Response("The brewery has been successfully added !");
@@ -113,13 +115,39 @@ class BreweryControllerAPI extends AbstractController
             return $response;
         }
 
-        $entityManager = $this->getDoctrine()->getManager();
-        $brewery = $entityManager->getRepository(Brewery::class)->find($id);
+        $json = $request->getContent();
+        $content = json_decode($json, true);
+
+        $brewery = $this->getDoctrine()
+            ->getRepository(Brewery::class)
+            ->find($id);
+
+        $brewery->setName($content["name"]);
+        $brewery->setDescription($content["description"]);
+        $brewery->setWebsite($content["website"]);
+
+        $em = $this->getDoctrine()->getManager();
+
+// Not working ! Beer found, added to list beers but no link... Why ?
+        foreach ($content["beers"] as $beer_id) {
+          $beer = $em->getRepository(Beer::class)->find($beer_id);
+          if (!$beer) {
+            throw $this->createNotFoundException(
+              'No beer found for this beer id '.$beer_id
+            );
+          }
+          else {
+            $brewery->addBeer($beer);
+          }
+        }
 
         if (!$brewery) {
-          throw $this->createNotFoundException(
-              'No brewery found for this id '.$id
-            );
+            return new Response("Error: brewery update aborted !");
+        }
+        else {
+            $em->persist($brewery);
+            $em->flush();
+            return new Response("The brewery has been successfully updated !");
         }
     }
 

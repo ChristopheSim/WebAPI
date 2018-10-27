@@ -45,7 +45,11 @@ class BeerController extends AbstractController
           $em = $this->getDoctrine()->getManager();
           $em->persist($task);
           $em->flush();
-          return new Response('The beer has been successfully added !');
+          $this->addFlash(
+            'notice',
+            'The beer has been successfully added !'
+          );
+          return $this->redirectToRoute("beers");
         }
 
         return $this->render('beer/add_beer.html.twig', array('controller_name' => 'AddBeerFunction', 'form' => $form->createView()));
@@ -75,7 +79,11 @@ class BeerController extends AbstractController
           $entityManager = $this->getDoctrine()->getManager();
           $entityManager->persist($task);
           $entityManager->flush();
-          return new Response('The beer has been successfully added !');
+          $this->addFlash(
+            'notice',
+            'The beer has been successfully updated !'
+          );
+          return $this->redirectToRoute("beers");
         }
         return $this->render('beer/add_beer.html.twig', array('controller_name' => 'UpdateBeerFunction', 'form' => $form->createView()));
     }
@@ -98,6 +106,10 @@ class BeerController extends AbstractController
 
         $entityManager->remove($beer);
         $entityManager->flush();
-        return $this->render('beer/delete_beer.html.twig', array('controller_name' => 'DeleteBeerFunction', 'explications' => "The beer has been successfully deleted !"));
+        $this->addFlash(
+          'notice',
+          'The beer has been successfully deleted !'
+        );
+        return $this->redirectToRoute("beers");
     }
 }

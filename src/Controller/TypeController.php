@@ -45,7 +45,11 @@ class TypeController extends AbstractController
           $em = $this->getDoctrine()->getManager();
           $em->persist($task);
           $em->flush();
-          return new Response('The type has been successfully added !');
+          $this->addFlash(
+            'notice',
+            'The type has been successfully added !'
+          );
+          return $this->redirectToRoute("types");
         }
 
         return $this->render('type/add_type.html.twig', array('controller_name' => 'AddTypeFunction', 'form' => $form->createView()));
@@ -75,7 +79,11 @@ class TypeController extends AbstractController
           $entityManager = $this->getDoctrine()->getManager();
           $entityManager->persist($task);
           $entityManager->flush();
-          return new Response('The type has been successfully updated !');
+          $this->addFlash(
+            'notice',
+            'The type has been successfully updated !'
+          );
+          return $this->redirectToRoute("types");
         }
         return $this->render('type/add_type.html.twig', array('controller_name' => 'UpdateTypeFunction', 'form' => $form->createView()));
     }
@@ -97,6 +105,10 @@ class TypeController extends AbstractController
 
         $entityManager->remove($type);
         $entityManager->flush();
-        return $this->render('type/delete_type.html.twig', array('controller_name' => 'DeleteTypeFunction', 'explications' => "The type has been successfully deleted !"));
+        $this->addFlash(
+          'notice',
+          'The type has been successfully deleted !'
+        );
+        return $this->redirectToRoute("types");
     }
 }
