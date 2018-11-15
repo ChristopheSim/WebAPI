@@ -9,8 +9,8 @@ import { Beer } from '../beer';
 export class BeersComponent implements OnInit {
   delta: Beer = {
     id: 1,
-    name: 'Delta',
-    description: 'Bière IPA avec goûts exotiques',
+    name: 'Delta IPA',
+    description: 'Bière IPA avec des goûts de fruits exotiques',
     volume: 8.4,
     type: ipa,
     brewery: bbp

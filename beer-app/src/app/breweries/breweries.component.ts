@@ -10,7 +10,7 @@ export class BreweriesComponent implements OnInit {
   bbp: Brewery = {
     id: 1,
     name: 'Brussel beer project',
-    description: 'This is a small project to make beer at Brussels',
+    description: "Brasserie issue d'un projet consistant à brasser de la bière à Bruxelles",
     website: 'www.jesuisunexemple.be',
     beers: [delta]
   };
