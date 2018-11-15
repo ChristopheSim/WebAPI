@@ -1,4 +1,35 @@
 <h1>The component breweries works!</h1>
-<p>
-  {{ bbp.name | uppercase }}
-</p>
+
+<div>
+  <div>
+    <label>id<br>
+      <input [(ngModel)]="bbp.id" placeholder="id">
+    </label>
+  </div>
+
+  <div>
+    <label>Name<br>
+      <input [(ngModel)]="bbp.name" placeholder="name">
+    </label>
+  </div>
+
+  <div>
+    <label>Description<br>
+      <textarea rows="4" cols="50"  [(ngModel)]="bbp.description" placeholder="description"></textarea>
+    </label>
+  </div>
+
+  <div>
+    <label>Website<br>
+      <input [(ngModel)]="bbp.website" placeholder="website">
+    </label>
+  </div>
+
+  <div>
+    <label>Beers<br>
+      <li *ngFor="let beer of bbp.beers; let i = index">
+        {{i}} <input {{item}} placeholder="beer">
+      </li>
+    </label>
+  </div>
+</div>

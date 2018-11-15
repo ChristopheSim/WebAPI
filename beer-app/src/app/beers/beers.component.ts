@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Beer } from '../beer';
+import { Brewery } from '../brewery';
+import { Type } from '../type';
+import { TypesComponent } from 'src/app/types/types.component';
+import { BreweriesComponent } from 'src/app/breweries/breweries.component';
+import { BEERS } from '../mock-beers';
 
 @Component({
   selector: 'app-beers',
@@ -7,16 +12,14 @@ import { Beer } from '../beer';
   styleUrls: ['./beers.component.css']
 })
 export class BeersComponent implements OnInit {
-  delta: Beer = {
-    id: 1,
-    name: 'Delta IPA',
-    description: 'Bière IPA avec des goûts de fruits exotiques',
-    volume: 8.4,
-    type: ipa,
-    brewery: bbp
-  };
+  beers = BEERS;
+  selectedBeer: Beer;
   constructor() { }
 
   ngOnInit() {
+  }
+
+  onSelect(beer: Beer): void {
+    this.selectedBeer = beer;
   }
 }

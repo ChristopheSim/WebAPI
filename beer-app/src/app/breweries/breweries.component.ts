@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Brewery } from '../brewery';
+import { Beer } from '../beer';
+import { BeersComponent } from 'src/app/beers/beers.component';
 
 @Component({
   selector: 'app-breweries',
@@ -12,7 +14,7 @@ export class BreweriesComponent implements OnInit {
     name: 'Brussel beer project',
     description: "Brasserie issue d'un projet consistant à brasser de la bière à Bruxelles",
     website: 'www.jesuisunexemple.be',
-    beers: [delta]
+    beers: []
   };
   constructor() { }
 

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Type } from '../type';
+import { Beer } from '../beer';
+import { BeersComponent } from 'src/app/beers/beers.component';
 
 @Component({
   selector: 'app-types',
@@ -11,8 +13,8 @@ export class TypesComponent implements OnInit {
     id: 1,
     name: 'IPA',
     description: 'Bière amère et légèrement fruitée',
-    beers: [delta]
-  }
+    beers: []
+  };
   constructor() { }
 
   ngOnInit() {
