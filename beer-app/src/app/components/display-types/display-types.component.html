@@ -1,0 +1,42 @@
+<h1>My types</h1>
+
+<div>
+  <ul class="types">
+    <li *ngFor="let type of types"
+    [class.selected]="type === selectedType"
+    (click)="onSelect(type)">
+      <span class="badge">{{ type.id }}</span> {{ type.name }}
+    </li>
+  </ul>
+</div>
+
+<div *ngIf="selectedType">
+
+  <h2>{{ selectedType.name | uppercase }} Details</h2>
+
+  <div>
+      <span>id</span> {{ selectedType.id }}>
+  </div>
+
+  <div>
+    <label>Name<br>
+      <input [(ngModel)]="selectedType.name" placeholder="name">
+    </label>
+  </div>
+
+  <div>
+    <label>Description<br>
+      <textarea rows="4" cols="50"  [(ngModel)]="selectedType.description" placeholder="description"></textarea>
+    </label>
+  </div>
+
+  <div>
+    Beers<br>
+      <ul class="beers">
+        <li *ngFor="let beer of beers">
+          {{ selectedBrewery.beer.id }} {{ selectedBrewery.beer.name }}
+        </li>
+      </ul>
+  </div>
+
+</div>

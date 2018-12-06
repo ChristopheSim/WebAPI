@@ -18,6 +18,8 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
+header("Access-Control-Allow-Origin: *");
+
 class BreweryControllerAPI extends AbstractController
 {
     /**

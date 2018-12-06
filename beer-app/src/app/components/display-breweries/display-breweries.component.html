@@ -1,0 +1,48 @@
+<h1>My breweries</h1>
+
+<div>
+  <ul class="breweries">
+    <li *ngFor="let brewery of breweries"
+    [class.selected]="brewery === selectedBrewery"
+    (click)="onSelect(brewery)">
+      <span class="badge">{{ brewery.id }}</span> {{ brewery.name }}
+    </li>
+  </ul>
+</div>
+
+<div *ngIf="selectedBrewery">
+
+  <h2>{{ selectedBrewery.name | uppercase }} Details</h2>
+
+  <div>
+      <span>id</span> {{ selectedBrewery.id }}>
+  </div>
+
+  <div>
+    <label>Name<br>
+      <input [(ngModel)]="selectedBrewery.name" placeholder="name">
+    </label>
+  </div>
+
+  <div>
+    <label>Description<br>
+      <textarea rows="4" cols="50"  [(ngModel)]="selectedBrewery.description" placeholder="description"></textarea>
+    </label>
+  </div>
+
+  <div>
+    <label>Website<br>
+      <input [(ngModel)]="selectedBrewery.website" placeholder="website">
+    </label>
+  </div>
+
+  <div>
+    Beers<br>
+      <ul class="beers">
+        <li *ngFor="let beer of beers">
+          {{ selectedBrewery.beer.id }} {{ selectedBrewery.beer.name }}
+        </li>
+      </ul>
+  </div>
+
+</div>
