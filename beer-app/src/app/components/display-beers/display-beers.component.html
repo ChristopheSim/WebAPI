@@ -1,51 +1,24 @@
 <h1>My beers</h1>
 
-<div>
-  <ul class="beers">
-    <li *ngFor="let beer of beers"
-    [class.selected]="beer === selectedBeer"
-    (click)="onSelect(beer)">
-      <span class="badge">{{ beer.id }}</span> {{ beer.name }}
-    </li>
-  </ul>
-</div>
+<div *ngFor="let beer of beers">
+  <div class="card text-white bg-info mb-3" style="max-width: 20rem;">
+    <div class="card-header">{{ beer.name}}</div>
 
-<div *ngIf="selectedBeer">
-
-  <h2>{{ selectedBeer.name | uppercase }} Details</h2>
-
-  <div>
-      <span>id</span> {{ selectedBeer.id }}>
+    <div class="card-body">
+      <p class="card-text">{{ beer.description }}</p>
+      <p class="card-text">{{ beer.volume }}</p>
+      <span class="badge badge-pill badge-light">{{beer.Brewery.name}}</span>
+      <span class="badge badge-pill badge-light">{{beer.Type.name}}</span>
+    </div>
   </div>
 
-  <div>
-    <label>Name<br>
-      <input [(ngModel)]="selectedBeer.name" placeholder="name">
-    </label>
+  <div style="padding: 0px 0px 20px 0px;">
+    <a class="btn btn-primary" [routerLink]="['/beer', beer.id]">Modify</a>
+    <button class="btn btn-primary" (click)="showAlert(beer.id)">Delete</button>
   </div>
 
-  <div>
-    <label>Description<br>
-      <textarea rows="4" cols="50"  [(ngModel)]="selectedBeer.description" placeholder="description"></textarea>
-    </label>
-  </div>
-
-  <div>
-    <label>volume<br>
-      <input [(ngModel)]="selectedBeer.volume" placeholder="volume">
-    </label>
-  </div>
-
-  <div>
-    <label>Type<br>
-      <input [(ngModel)]="selectedBeer.type.name" placeholder="type">
-    </label>
-  </div>
-
-  <div>
-    <label>Brewery<br>
-      <input [(ngModel)]="selectedBeer.brewery.name" placeholder="brewery">
-    </label>
-  </div>
-
+  <app-modal-delete-beer style="padding: 0px 0px 40px 0px; display:none;" id='{{beer.id}}'
+                    (delete)="deleteBeer(beer.id)"
+                    (cancel)="showAlert(beer.id)">
+  </app-modal-delete-beer>
 </div>

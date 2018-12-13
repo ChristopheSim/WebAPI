@@ -15,13 +15,11 @@ export class BeerService {
     return this.http.get<Beer[]>(this.url, { responseType: 'json' });
   }
 
-/*
-  getBeer(id: number): Observable<Beer> {
+  getBeer(id: string): Observable<Beer> {
     return this.http.get<Beer>(this.url + '/get_beer/' + id, { responseType: 'json' });
   }
-*/
 
-  putBeer(id: number, beer: Beer): Observable<any> {
+  putBeer(id: number, beer): Observable<any> {
     const httpOptions = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' })
     };
@@ -29,7 +27,7 @@ export class BeerService {
     return this.http.put(this.url + '/update_beer/' + id, beer, httpOptions)
   }
 
-  postBeer(beer: Beer): Observable<any> {
+  postBeer(beer): Observable<any> {
     const httpOptions = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' })
     };

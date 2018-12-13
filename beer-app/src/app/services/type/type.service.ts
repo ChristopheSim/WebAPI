@@ -15,11 +15,9 @@ export class TypeService {
     return this.http.get<Type[]>(this.url, { responseType: 'json' });
   }
 
-/*
-  getType(id: number): Observable<Type> {
+  getType(id: string): Observable<Type> {
     return this.http.get<Type>(this.url + '/get_type/' + id, { responseType: 'json' });
   }
-*/
 
   putType(id: number, type: Type): Observable<any> {
     const httpOptions = {

@@ -1,48 +1,31 @@
 <h1>My breweries</h1>
 
-<div>
-  <ul class="breweries">
-    <li *ngFor="let brewery of breweries"
-    [class.selected]="brewery === selectedBrewery"
-    (click)="onSelect(brewery)">
-      <span class="badge">{{ brewery.id }}</span> {{ brewery.name }}
-    </li>
-  </ul>
-</div>
+<div *ngFor="let brewery of breweries">
+ <div class="card text-white bg-info mb-3" style="max-width: 20rem;">
+    <div class="card-header">{{ brewery.name }}</div>
 
-<div *ngIf="selectedBrewery">
+    <div class="card-body">
+      <p class="card-text">{{ brewery.description }}</p>
+    </div>
 
-  <h2>{{ selectedBrewery.name | uppercase }} Details</h2>
+    <div class="card-body">
+      <p class="card-text">{{ brewery.website }}</p>
+    </div>
 
-  <div>
-      <span>id</span> {{ selectedBrewery.id }}>
+    <div class="card-body">
+        <div *ngFor="let beer of beers">
+          <li>{{ beer.name }}</li>
+        </div>
+    </div>
   </div>
 
-  <div>
-    <label>Name<br>
-      <input [(ngModel)]="selectedBrewery.name" placeholder="name">
-    </label>
+  <div style="padding: 0px 0px 20px 0px;">
+    <a class="btn btn-primary" [routerLink]="['/brewery', brewery.id]">Modify</a>
+    <button class="btn btn-primary" (click)="showAlert(brewery.id)">Delete</button>
   </div>
 
-  <div>
-    <label>Description<br>
-      <textarea rows="4" cols="50"  [(ngModel)]="selectedBrewery.description" placeholder="description"></textarea>
-    </label>
-  </div>
-
-  <div>
-    <label>Website<br>
-      <input [(ngModel)]="selectedBrewery.website" placeholder="website">
-    </label>
-  </div>
-
-  <div>
-    Beers<br>
-      <ul class="beers">
-        <li *ngFor="let beer of beers">
-          {{ selectedBrewery.beer.id }} {{ selectedBrewery.beer.name }}
-        </li>
-      </ul>
-  </div>
-
+  <app-modal-delete-brewery style="padding: 0px 0px 40px 0px; display:none;" id='{{brewery.id}}'
+                    (delete)="deleteBrewery(brewery.id)"
+                    (cancel)="showAlert(brewery.id)">
+  </app-modal-delete-brewery>
 </div>

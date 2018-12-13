@@ -1,42 +1,27 @@
 <h1>My types</h1>
 
-<div>
-  <ul class="types">
-    <li *ngFor="let type of types"
-    [class.selected]="type === selectedType"
-    (click)="onSelect(type)">
-      <span class="badge">{{ type.id }}</span> {{ type.name }}
-    </li>
-  </ul>
-</div>
+<div *ngFor="let type of types">
+ <div class="card text-white bg-info mb-3" style="max-width: 20rem;">
+    <div class="card-header">{{ type.name }}</div>
 
-<div *ngIf="selectedType">
-
-  <h2>{{ selectedType.name | uppercase }} Details</h2>
-
-  <div>
-      <span>id</span> {{ selectedType.id }}>
+    <div class="card-body">
+      <p class="card-text">{{ type.description }}</p>
+    </div>
   </div>
 
-  <div>
-    <label>Name<br>
-      <input [(ngModel)]="selectedType.name" placeholder="name">
-    </label>
+  <div class="card-body">
+      <div *ngFor="let beer of beers">
+        <li>{{ beer.name }}</li>
+      </div>
   </div>
 
-  <div>
-    <label>Description<br>
-      <textarea rows="4" cols="50"  [(ngModel)]="selectedType.description" placeholder="description"></textarea>
-    </label>
+  <div style="padding: 0px 0px 20px 0px;">
+    <a class="btn btn-primary" [routerLink]="['/type', type.id]">Modify</a>
+    <button class="btn btn-primary" (click)="showAlert(type.id)">Delete</button>
   </div>
 
-  <div>
-    Beers<br>
-      <ul class="beers">
-        <li *ngFor="let beer of beers">
-          {{ selectedBrewery.beer.id }} {{ selectedBrewery.beer.name }}
-        </li>
-      </ul>
-  </div>
-
+  <app-modal-delete-type style="padding: 0px 0px 40px 0px; display:none;" id='{{type.id}}'
+                    (delete)="deleteType(type.id)"
+                    (cancel)="showAlert(type.id)">
+  </app-modal-delete-type>
 </div>

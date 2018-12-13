@@ -13,6 +13,9 @@ import { CreateTypeComponent } from 'src/app/components/create-type/create-type.
 import { ModifyBeerComponent } from 'src/app/components/modify-beer/modify-beer.component';
 import { ModifyBreweryComponent } from 'src/app/components/modify-brewery/modify-brewery.component';
 import { ModifyTypeComponent } from 'src/app/components/modify-type/modify-type.component';
+import { ModalDeleteBreweryComponent } from 'src/app/components/modal-delete-brewery/modal-delete-brewery.component';
+import { ModalDeleteTypeComponent } from 'src/app/components/modal-delete-type/modal-delete-type.component';
+import { ModalDeleteBeerComponent } from 'src/app/components/modal-delete-beer/modal-delete-beer.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +28,10 @@ import { ModifyTypeComponent } from 'src/app/components/modify-type/modify-type.
     CreateTypeComponent,
     ModifyBeerComponent,
     ModifyBreweryComponent,
-    ModifyTypeComponent
+    ModifyTypeComponent,
+    ModalDeleteBreweryComponent,
+    ModalDeleteTypeComponent,
+    ModalDeleteBeerComponent
   ],
   imports: [
     BrowserModule,

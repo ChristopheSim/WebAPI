@@ -15,11 +15,9 @@ export class BreweryService {
     return this.http.get<Brewery[]>(this.url, { responseType: 'json' });
   }
 
-/*
-  getBrewery(id: number): Observable<Brewery> {
+  getBrewery(id: string): Observable<Brewery> {
     return this.http.get<Brewery>(this.url + '/get_brewery/' + id, { responseType: 'json' });
   }
-*/
 
   putBrewery(id: number, brewery: Brewery): Observable<any> {
     const httpOptions = {
