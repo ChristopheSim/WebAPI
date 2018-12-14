@@ -8,4 +8,9 @@ export class Beer {
   public volume: number;
   public type: Type;
   public brewery: Brewery;
+
+  constructor() {
+    this.brewery = new Brewery();
+    this.type = new Type();
+  }
 }

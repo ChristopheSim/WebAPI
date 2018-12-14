@@ -52,13 +52,58 @@ class BeerControllerAPI extends AbstractController
         return $response;
     }
 
+    /**
+     * @Route("/api/beers/get_beer/{id}", name="api_get_beer", methods={"GET"}))
+     */
+    public function getBeerAction($id)
+    {
+      if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS')
+      {
+          $response = new Response();
+          $response->headers->set('Access-Control-Allow-Origin', '*');
+          $response->headers->set('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
+
+          return $response;
+      }
+
+      $response = new Response();
+      $normalizer = new ObjectNormalizer();
+      $normalizer->setCircularReferenceLimit(1);
+      $normalizer->setCircularReferenceHandler(function ($object) {
+        return $object->getId();
+      });
+
+      $encoders = array(new JsonEncoder());
+      $normalizers = array($normalizer);
+      $serializer = new Serializer($normalizers, $encoders);
+      $em = $this->getDoctrine()->getManager();
+      if ($id != null) {
+          $beer = $em->getRepository(Beer::class)
+                      ->find($id);
+
+          if ($beer != null) {
+              $jsonContent = $serializer->serialize($beer, 'json');
+              $response->setContent($jsonContent);
+              $response->headers->set('Content-Type', 'application/json');
+              $response->setStatusCode('200');
+          }
+          else {
+              $response->setStatusCode('404');
+          }
+      }
+      else {
+          $response->setStatusCode('404');
+      }
+      return $response;
+    }
+
 
     /**
      * @Route("/api/beers/add_beer", name="api_add_beer", methods={"POST"}))
      */
     public function addBeerAction(Request $request)
     {
-        // just setup a fresh $task object (remove the dummy data)
+        // just setup a fresh $beer object
         if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS')
         {
             $response = new Response();
@@ -117,7 +162,7 @@ class BeerControllerAPI extends AbstractController
      */
     public function updateBeerAction(Request $request, $id)
     {
-        // just setup a fresh $task object (remove the dummy data)
+        // just setup a fresh $beer object
         if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS')
         {
             $response = new Response();

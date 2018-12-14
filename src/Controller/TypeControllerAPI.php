@@ -53,6 +53,51 @@ class TypeControllerAPI extends AbstractController
     }
 
     /**
+     * @Route("/api/types/get_type/{id}", name="api_get_type", methods={"GET"}))
+     */
+    public function getTypeAction($id)
+    {
+      if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS')
+      {
+          $response = new Response();
+          $response->headers->set('Access-Control-Allow-Origin', '*');
+          $response->headers->set('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
+
+          return $response;
+      }
+
+      $response = new Response();
+      $normalizer = new ObjectNormalizer();
+      $normalizer->setCircularReferenceLimit(1);
+      $normalizer->setCircularReferenceHandler(function ($object) {
+        return $object->getId();
+      });
+
+      $encoders = array(new JsonEncoder());
+      $normalizers = array($normalizer);
+      $serializer = new Serializer($normalizers, $encoders);
+      $em = $this->getDoctrine()->getManager();
+      if ($id != null) {
+          $type = $em->getRepository(Type::class)
+                      ->find($id);
+
+          if ($type != null) {
+              $jsonContent = $serializer->serialize($type, 'json');
+              $response->setContent($jsonContent);
+              $response->headers->set('Content-Type', 'application/json');
+              $response->setStatusCode('200');
+          }
+          else {
+              $response->setStatusCode('404');
+          }
+      }
+      else {
+          $response->setStatusCode('404');
+      }
+      return $response;
+    }
+
+    /**
      * @Route("/api/types/add_type", name="api_add_type", methods={"POST"}))
      */
     public function addTypeAction(Request $request)
