@@ -36,6 +36,6 @@ export class BreweryService {
   }
 
   deleteBrewery(id): Observable<any> {
-    return this.http.delete(this.url +  '/delete_Brewery/' + id)
+    return this.http.delete(this.url +  '/delete_brewery/' + id)
   }
 }

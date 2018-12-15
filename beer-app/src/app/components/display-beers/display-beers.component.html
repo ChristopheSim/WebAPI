@@ -27,7 +27,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let beer of beers|sortBeer:search1, search2">
+    <tr *ngFor="let beer of beers|sortBeer:search1:search2">
       <td scope="row">{{ beer.id }}</td>
       <td>{{ beer.name }}</td>
       <td>{{ beer.description }}</td>
