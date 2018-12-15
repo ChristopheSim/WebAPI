@@ -1,24 +1,45 @@
 <h1>My beers</h1>
 
-<div *ngFor="let beer of beers">
-  <div class="card text-white bg-info mb-3" style="max-width: 20rem;">
-    <div class="card-header">{{ beer.name}}</div>
-
-    <div class="card-body">
-      <p class="card-text">{{ beer.description }}</p>
-      <p class="card-text">{{ beer.volume }}</p>
-      <span class="badge badge-pill badge-light">{{beer.Brewery.name}}</span>
-      <span class="badge badge-pill badge-light">{{beer.Type.name}}</span>
-    </div>
+<form style="width:25%; padding: 0px 0px 20px 0px;">
+  <div class="form-group">
+    <select class="form-control" id="exampleSelect1" [(ngModel)]="search1" name="breweries">
+        <option value="All" selected>All breweries</option>
+        <option *ngFor="let brewery of breweries" [ngValue]="brewery.name">{{ brewery.name }}</option>
+    </select>
+    <select class="form-control" id="exampleSelect2" [(ngModel)]="search2" name="types">
+        <option value="All" selected>All types</option>
+        <option *ngFor="let type of types" [ngValue]="type.name">{{ type.name }}</option>
+    </select>
   </div>
+</form>
 
-  <div style="padding: 0px 0px 20px 0px;">
-    <a class="btn btn-primary" [routerLink]="['/beer', beer.id]">Modify</a>
-    <button class="btn btn-primary" (click)="showAlert(beer.id)">Delete</button>
-  </div>
-
-  <app-modal-delete-beer style="padding: 0px 0px 40px 0px; display:none;" id='{{beer.id}}'
-                    (delete)="deleteBeer(beer.id)"
-                    (cancel)="showAlert(beer.id)">
-  </app-modal-delete-beer>
-</div>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">id</th>
+      <th scope="col">Name</th>
+      <th scope="col">Description</th>
+      <th scope="col">Volume</th>
+      <th scope="col">Brewery</th>
+      <th scope="col">Type</th>
+      <th scope="col"></th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let beer of beers|sortBeer:search1, search2">
+      <td scope="row">{{ beer.id }}</td>
+      <td>{{ beer.name }}</td>
+      <td>{{ beer.description }}</td>
+      <td>{{ beer.volume }}</td>
+      <td>{{ beer.brewery.name }}</td>
+      <td>{{ beer.type.name }}</td>
+      <td><a class="btn btn-primary" [routerLink]="['/beer', beer.id]">Update</a></td>
+      <td><button class="btn btn-primary" (click)="showAlert(beer.id)">Delete</button></td>
+      <app-modal-delete-beer style="display:none;" id='{{beer.id}}'
+                        (delete)="deleteBeer(beer.id)"
+                        (cancel)="showAlert(beer.id)">
+      </app-modal-delete-beer>
+    </tr>
+  </tbody>
+</table>

@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+
 import { BeerService } from 'src/app/services/beer/beer.service';
-import { Beer } from 'src/app/classes/beer';
 import { BreweryService } from 'src/app/services/brewery/brewery.service';
+import { TypeService } from 'src/app/services/type/type.service';
+
+import { Beer } from 'src/app/classes/beer';
 import { Brewery } from 'src/app/classes/brewery';
 import { Type } from 'src/app/classes/type';
-import { TypeService } from 'src/app/services/type/type.service';
+
 
 @Component({
   selector: 'app-modify-beer',
@@ -26,7 +29,7 @@ export class ModifyBeerComponent implements OnInit {
   ngOnInit() {
     this.getBeer();
     this.getBreweries();
-    this.getType();
+    this.getTypes();
   }
 
   getBeer() {
@@ -52,7 +55,7 @@ export class ModifyBeerComponent implements OnInit {
     );
   }
 
-  getType() {
+  getTypes() {
     this.typeService.getTypes().subscribe(
       (data) => {
         this.types = data;
@@ -72,11 +75,24 @@ export class ModifyBeerComponent implements OnInit {
       'type': this.beer.type
     };
 
-    this.beerService.putBeer(this.beer.id, newBeer).subscribe(
-      (data) => {
-        this.router.navigate(['/beers']);
+    if (newBeer.name !== undefined && newBeer.description !== undefined && newBeer.volume !== undefined && newBeer.brewery.id !== undefined && newBeer.type.id !== undefined) {
+      if (newBeer.name.length !== 0 && newBeer.description.length !== 0 && newBeer.brewery.name.length !== 0 && newBeer.type.name.length !== 0) {
+        this.beerService.postBeer(newBeer).subscribe(
+          (data) => {
+            if (data.valid === true) {
+              this.router.navigate(['/beers']);
+            }
+            else {
+              document.getElementById('send-error').style.display = 'block';
+            }
+          }
+        );
+      }else {
+        document.getElementById('form-error').style.display = 'block';
       }
-    );
+    }else {
+      document.getElementById('form-error').style.display = 'block';
+    }
   }
 
 }

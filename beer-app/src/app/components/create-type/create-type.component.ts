@@ -20,16 +20,24 @@ export class CreateTypeComponent implements OnInit {
   }
 
   onSubmit() {
-    this.typeService.postType(this.newType).subscribe(
-      (data) => {
-        if (data.valid == true) {
-          this.router.navigate(['/Types']);
-        }
-        else {
-          console.log("error");
-        }
+    if (this.newType.name !== undefined && this.newType.description !== undefined) {
+      if (this.newType.name.length !== 0 && this.newType.description.length !== 0) {
+        this.typeService.postType(this.newType).subscribe(
+          (data) => {
+            if (data.valid == true) {
+              this.router.navigate(['/types']);
+            }
+            else {
+              document.getElementById('send-error').style.display ='block';
+            }
+          }
+        );
+      } else {
+        document.getElementById('form-error').style.display ='block';
       }
-    );
-}
+    } else {
+      document.getElementById('form-error').style.display ='block';
+    }
+  }
 
 }

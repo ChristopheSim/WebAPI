@@ -52,8 +52,8 @@
         <td>{% if elem.getBrewery() is not null %}
             {{ elem.getBrewery().getName() }}
             {% endif %}</td>
-        <td><a href="/beers/update_beer/{{ elem.getId() }}><button type="button" class="btn btn-warning">Update</button></td>
-        <td><a href="/beers/delete_beer/{{ elem.getId() }}><button type="button" class="btn btn-warning">Delete</button></td>
+        <td><a href="/beers/update_beer/{{ elem.getId() }}"><button type="button" class="btn btn-warning">Update</button></td>
+        <td><a href="/beers/delete_beer/{{ elem.getId() }}"><button type="button" class="btn btn-warning">Delete</button></td>
       </tr>
     {% endfor %}
     </tbody>

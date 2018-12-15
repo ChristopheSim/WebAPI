@@ -124,7 +124,6 @@ class BreweryControllerAPI extends AbstractController
 
         $em = $this->getDoctrine()->getManager();
 
-// Not working ! Beer found, added to list beers but no link... Why ?
         foreach ($content["beers"] as $beer_id) {
           $beer = $em->getRepository(Beer::class)->find($beer_id);
           if (!$beer) {
@@ -176,7 +175,6 @@ class BreweryControllerAPI extends AbstractController
 
         $em = $this->getDoctrine()->getManager();
 
-// Not working ! Beer found, added to list beers but no link... Why ?
         foreach ($content["beers"] as $beer_id) {
           $beer = $em->getRepository(Beer::class)->find($beer_id);
           if (!$beer) {

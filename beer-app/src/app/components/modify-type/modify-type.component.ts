@@ -32,11 +32,19 @@ export class ModifyTypeComponent implements OnInit {
   }
 
   onSubmit() {
-    this.typeService.putType(this.type.id, this.type).subscribe(
-      (data) => {
-        this.router.navigate(['/types']);
-      }
-    );
+    if (this.type.name.length !== 0 && this.type.description.length !== 0) {
+      this.typeService.putType(this.type.id, this.type).subscribe(
+        (data) => {
+          if (data.valid === true){
+            this.router.navigate(['/types']);
+          } else {
+            document.getElementById('send-error').style.display = "block";
+          }
+        }
+      );
+    } else {
+      document.getElementById('form-error').style.display = "block";
+    }
   }
 
 }

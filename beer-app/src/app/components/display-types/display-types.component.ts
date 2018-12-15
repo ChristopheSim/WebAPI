@@ -7,23 +7,19 @@ import { TypeService } from 'src/app/services/type/type.service'
 
 
 @Component({
-  selector: 'app-types',
+  selector: 'app-display-types',
   templateUrl: './display-types.component.html',
   styleUrls: ['./display-types.component.css']
 })
 export class DisplayTypesComponent implements OnInit {
   show: boolean = false;
   types: Type[];
-  selectedType: Type;
+
   constructor(private typeService: TypeService,
               private router: Router) { }
 
   ngOnInit() {
     this.getTypes();
-  }
-
-  onSelect(type: Type): void {
-    this.selectedType = type;
   }
 
   getTypes() {
@@ -45,6 +41,7 @@ export class DisplayTypesComponent implements OnInit {
   }
 
   deleteType(id) {
+    this.show = false;
     this.typeService.deleteType(id).subscribe(
       (data) => {
         if (data.valid == true) {
@@ -54,8 +51,6 @@ export class DisplayTypesComponent implements OnInit {
               this.types.splice(i, 1);
             }
           }
-
-          console.log(this.types);
 
           this.router.navigate(['/types']);
         }

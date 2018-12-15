@@ -2,7 +2,7 @@
 
 <div *ngFor="let brewery of breweries">
  <div class="card text-white bg-info mb-3" style="max-width: 20rem;">
-    <div class="card-header">{{ brewery.name }}</div>
+    <div class="card-header">{{ brewery.id }} {{ brewery.name }}</div>
 
     <div class="card-body">
       <p class="card-text">{{ brewery.description }}</p>
@@ -13,14 +13,14 @@
     </div>
 
     <div class="card-body">
-        <div *ngFor="let beer of beers">
+        <div *ngFor="let beer of brewery.beers">
           <li>{{ beer.name }}</li>
         </div>
     </div>
   </div>
 
   <div style="padding: 0px 0px 20px 0px;">
-    <a class="btn btn-primary" [routerLink]="['/brewery', brewery.id]">Modify</a>
+    <a class="btn btn-primary" [routerLink]="['/brewery', brewery.id]">Update</a>
     <button class="btn btn-primary" (click)="showAlert(brewery.id)">Delete</button>
   </div>
 

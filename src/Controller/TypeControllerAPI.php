@@ -120,7 +120,6 @@ class TypeControllerAPI extends AbstractController
         $type->setName($content["name"]);
         $type->setDescription($content["description"]);
 
-// Not working ! Beer found, added to list beers but no link... Why ?
         foreach ($content["beers"] as $beer_id) {
           $em = $this->getDoctrine()->getManager();
           $beer = $this->getRepository(Beer::class)->find($beer_id);
@@ -169,7 +168,6 @@ class TypeControllerAPI extends AbstractController
         $type->setName($content["name"]);
         $type->setDescription($content["description"]);
 
-// Not working ! Beer found, added to list beers but no link... Why ?
         foreach ($content["beers"] as $beer_id) {
           $em = $this->getDoctrine()->getManager();
           $beer = $this->getRepository(Beer::class)->find($beer_id);

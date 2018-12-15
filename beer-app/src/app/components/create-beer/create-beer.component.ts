@@ -62,14 +62,24 @@ export class CreateBeerComponent implements OnInit {
       'type': this.newBeer.type
     };
 
-    this.beerService.postBeer(newBeer).subscribe(
-      (data) => {
-        if (data.valid === true) {
-          this.router.navigate(['/beers']);
-        }
-        else { console.log("error"); }
+    if (this.newBeer.name !== undefined && this.newBeer.description !== undefined && this.newBeer.volume !== undefined && this.newBeer.brewery.id !== undefined && this.newBeer.type.id !== undefined) {
+      if (this.newBeer.name.length !== 0 && this.newBeer.description.length !== 0 && this.newBeer.brewery.name.length !== 0 && this.newBeer.type.name.length !== 0) {
+        this.beerService.postBeer(newBeer).subscribe(
+          (data) => {
+            if (data.valid === true) {
+              this.router.navigate(['/beers']);
+            }
+            else {
+              document.getElementById('send-error').style.display = 'block';
+            }
+          }
+        );
+      }else {
+        document.getElementById('form-error').style.display = 'block';
       }
-    );
+    }else {
+      document.getElementById('form-error').style.display = 'block';
+    }
   }
 
 }

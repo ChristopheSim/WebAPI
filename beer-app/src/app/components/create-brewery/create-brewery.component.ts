@@ -20,16 +20,24 @@ export class CreateBreweryComponent implements OnInit {
   }
 
   onSubmit() {
-    this.breweryService.postBrewery(this.newBrewery).subscribe(
-      (data) => {
-        if (data.valid == true) {
-          this.router.navigate(['/breweries']);
-        }
-        else {
-          console.log("error");
-        }
+    if (this.newBrewery.name !== undefined && this.newBrewery.description !== undefined && this.newBrewery.website !== undefined) {
+      if (this.newBrewery.name.length !== 0 && this.newBrewery.description.length !== 0 && this.newBrewery.website.length !== 0) {
+        this.breweryService.postBrewery(this.newBrewery).subscribe(
+          (data) => {
+            if (data.valid == true) {
+              this.router.navigate(['/breweries']);
+            }
+            else {
+              document.getElementById('send-error').style.display ='block';
+            }
+          }
+        );
+      } else {
+        document.getElementById('form-error').style.display ='block';
       }
-    );
-}
+    } else {
+      document.getElementById('form-error').style.display ='block';
+    }
+  }
 
 }

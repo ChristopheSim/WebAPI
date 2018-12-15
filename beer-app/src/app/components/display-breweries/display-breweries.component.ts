@@ -6,23 +6,19 @@ import { Type } from 'src/app/classes/type';
 import { BreweryService } from 'src/app/services/brewery/brewery.service'
 
 @Component({
-  selector: 'app-breweries',
+  selector: 'app-display-breweries',
   templateUrl: './display-breweries.component.html',
   styleUrls: ['./display-breweries.component.css']
 })
 export class DisplayBreweriesComponent implements OnInit {
   show: boolean = false;
   breweries: Brewery[];
-  selectedBrewery: Brewery;
+
   constructor(private breweryService: BreweryService,
               private router: Router) { }
 
   ngOnInit() {
     this.getBreweries();
-  }
-
-  onSelect(brewery: Brewery): void {
-    this.selectedBrewery = brewery;
   }
 
   getBreweries() {
@@ -44,6 +40,7 @@ export class DisplayBreweriesComponent implements OnInit {
   }
 
   deleteBrewery(id) {
+    this.show = false;
     this.breweryService.deleteBrewery(id).subscribe(
       (data) => {
         if (data.valid == true) {
@@ -53,8 +50,6 @@ export class DisplayBreweriesComponent implements OnInit {
               this.breweries.splice(i, 1);
             }
           }
-
-          console.log(this.breweries);
 
           this.router.navigate(['/breweries']);
         }
