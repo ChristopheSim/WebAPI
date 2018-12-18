@@ -27,11 +27,13 @@ class TypeControllerAPI extends AbstractController
      */
     public function indexAction()
     {
+        // just setup a fresh object (remove the dummy data)
         if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS')
         {
-            $response = new Response();
+            $response->headers->set('Content-Type', 'application/text');
             $response->headers->set('Access-Control-Allow-Origin', '*');
             $response->headers->set('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
+            $response->headers->set('Access-Control-Allow-Headers', 'Content-Type',true);
 
             return $response;
         }
@@ -53,15 +55,17 @@ class TypeControllerAPI extends AbstractController
     }
 
     /**
-     * @Route("/api/types/get_type/{id}", name="api_get_type", methods={"GET"}))
+     * @Route("/api/types/get_type/{id}", name="api_get_type", methods={"GET"})
      */
     public function getTypeAction($id)
     {
+      // just setup a fresh object (remove the dummy data)
       if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS')
       {
-          $response = new Response();
+          $response->headers->set('Content-Type', 'application/text');
           $response->headers->set('Access-Control-Allow-Origin', '*');
           $response->headers->set('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
+          $response->headers->set('Access-Control-Allow-Headers', 'Content-Type',true);
 
           return $response;
       }
@@ -98,16 +102,19 @@ class TypeControllerAPI extends AbstractController
     }
 
     /**
-     * @Route("/api/types/add_type", name="api_add_type", methods={"POST"}))
+     * @Route("/api/types/add_type", name="api_add_type", methods={"GET", "POST", "OPTIONS"})
      */
     public function addTypeAction(Request $request)
     {
-        // just setup a fresh $task object (remove the dummy data)
+        $response = new Response();
+        $query = array();
+        // just setup a fresh object (remove the dummy data)
         if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS')
         {
-            $response = new Response();
+            $response->headers->set('Content-Type', 'application/text');
             $response->headers->set('Access-Control-Allow-Origin', '*');
             $response->headers->set('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
+            $response->headers->set('Access-Control-Allow-Headers', 'Content-Type',true);
 
             return $response;
         }
@@ -119,7 +126,7 @@ class TypeControllerAPI extends AbstractController
 
         $type->setName($content["name"]);
         $type->setDescription($content["description"]);
-
+/*
         foreach ($content["beers"] as $beer_id) {
           $em = $this->getDoctrine()->getManager();
           $beer = $this->getRepository(Beer::class)->find($beer_id);
@@ -130,30 +137,38 @@ class TypeControllerAPI extends AbstractController
           }
           $type->addBeer($beer);
         }
-
-        if (!$type) {
-            return new Response("Error: type creation aborted !");
+*/
+        if ($type != null) {
+          $em = $this->getDoctrine()->getManager();
+          $em->persist($type);
+          $em->flush();
+          $response->setStatusCode('200');
+          $query['status'] = true;
         }
         else {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($type);
-            $em->flush();
-            return new Response("The type has been successfully added !");
+          $response->setStatusCode('404');
+          $query['status'] = false;
         }
+        $response->headers->set('Content-Type', 'application/json');
+        $response->setContent(json_encode($query));
+        return $response;
     }
 
 
     /**
-     * @Route("/api/types/update_type/{id}", name="api_update_type", methods={"PUT"}))
+     * @Route("/api/types/update_type/{id}", name="api_update_type", methods={"GET", "PUT", "OPTIONS"})
      */
     public function updateTypeAction(Request $request, $id)
     {
-        // just setup a fresh $task object (remove the dummy data)
+        $response = new Response();
+        $query = array();
+        // just setup a fresh object (remove the dummy data)
         if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS')
         {
-            $response = new Response();
+            $response->headers->set('Content-Type', 'application/text');
             $response->headers->set('Access-Control-Allow-Origin', '*');
             $response->headers->set('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
+            $response->headers->set('Access-Control-Allow-Headers', 'Content-Type',true);
 
             return $response;
         }
@@ -167,7 +182,7 @@ class TypeControllerAPI extends AbstractController
 
         $type->setName($content["name"]);
         $type->setDescription($content["description"]);
-
+/*
         foreach ($content["beers"] as $beer_id) {
           $em = $this->getDoctrine()->getManager();
           $beer = $this->getRepository(Beer::class)->find($beer_id);
@@ -178,44 +193,55 @@ class TypeControllerAPI extends AbstractController
           }
           $type->addBeer($beer);
         }
-
-        if (!$type) {
-            return new Response("Error: type creation aborted !");
+*/
+        if ($type != null) {
+          $em = $this->getDoctrine()->getManager();
+          $em->persist($type);
+          $em->flush();
+          $response->setStatusCode('200');
+          $query['status'] = true;
         }
         else {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($type);
-            $em->flush();
-            return new Response("The type has been successfully updated !");
+          $response->setStatusCode('404');
+          $query['status'] = false;
         }
+        $response->headers->set('Content-Type', 'application/json');
+        $response->setContent(json_encode($query));
+        return $response;
     }
 
     /**
-     * @Route("/api/types/delete_type/{id}", name="api_delete_type", methods={"DELETE"}))
+     * @Route("/api/types/delete_type/{id}", name="api_delete_type", methods={"GET", "DELETE", "OPTIONS"})
      */
     public function deleteTypeAction(Request $request, $id)
     {
-        // just setup a fresh $task object (remove the dummy data)
+        $response = new Response();
+        $query = array();
+        // just setup a fresh object (remove the dummy data)
         if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS')
         {
-            $response = new Response();
+            $response->headers->set('Content-Type', 'application/text');
             $response->headers->set('Access-Control-Allow-Origin', '*');
             $response->headers->set('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
+            $response->headers->set('Access-Control-Allow-Headers', 'Content-Type',true);
 
             return $response;
         }
 
-        $entityManager = $this->getDoctrine()->getManager();
-        $type = $entityManager->getRepository(Type::class)->find($id);
+        if ($id != null) {
+          $entityManager = $this->getDoctrine()->getManager();
+          $type = $entityManager->getRepository(Type::class)->find($id);
+          $entityManager->remove($type);
+          $entityManager->flush();
+          $response->setStatusCode('200');
+          $query['status'] = true;
+        } else {
+          $response->setStatusCode('404');
+          $query['status'] = false;
+        }
 
-        if (!$type) {
-          throw $this->createNotFoundException(
-              'No type found for this id '.$id
-            );
-          }
-
-        $entityManager->remove($type);
-        $entityManager->flush();
-        return new Response("The type was successfully deleted !");
+        $response->headers->set('Content-Type', 'application/json');
+        $response->setContent(json_encode($query));
+        return $response;
     }
 }

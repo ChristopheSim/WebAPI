@@ -66,11 +66,7 @@ export class CreateBeerComponent implements OnInit {
       if (this.newBeer.name.length !== 0 && this.newBeer.description.length !== 0) {
         this.beerService.postBeer(newBeer).subscribe(
           (data) => {
-            if (data.valid === true) {
-              this.router.navigate(['/beers']);
-            } else {
-              document.getElementById('send-error').style.display = 'block';
-            }
+            this.router.navigate(['/beers']);
           }
         );
       } else {

@@ -24,12 +24,7 @@ export class CreateBreweryComponent implements OnInit {
       if (this.newBrewery.name.length !== 0 && this.newBrewery.description.length !== 0 && this.newBrewery.website.length !== 0) {
         this.breweryService.postBrewery(this.newBrewery).subscribe(
           (data) => {
-            if (data.valid == true) {
-              this.router.navigate(['/breweries']);
-            }
-            else {
-              document.getElementById('send-error').style.display ='block';
-            }
+            this.router.navigate(['/breweries']);
           }
         );
       } else {

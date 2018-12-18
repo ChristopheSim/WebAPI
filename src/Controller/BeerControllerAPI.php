@@ -27,14 +27,16 @@ class BeerControllerAPI extends AbstractController
      */
     public function indexAction()
     {
-        if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS')
-        {
-            $response = new Response();
-            $response->headers->set('Access-Control-Allow-Origin', '*');
-            $response->headers->set('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
+      // just setup a fresh object (remove the dummy data)
+      if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS')
+      {
+          $response->headers->set('Content-Type', 'application/text');
+          $response->headers->set('Access-Control-Allow-Origin', '*');
+          $response->headers->set('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
+          $response->headers->set('Access-Control-Allow-Headers', 'Content-Type',true);
 
-            return $response;
-        }
+          return $response;
+      }
 
         $normalizer = new ObjectNormalizer();
         $normalizer->setCircularReferenceLimit(1);
@@ -53,15 +55,17 @@ class BeerControllerAPI extends AbstractController
     }
 
     /**
-     * @Route("/api/beers/get_beer/{id}", name="api_get_beer", methods={"GET"}))
+     * @Route("/api/beers/get_beer/{id}", name="api_get_beer", methods={"GET"})
      */
     public function getBeerAction($id)
     {
+      // just setup a fresh object (remove the dummy data)
       if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS')
       {
-          $response = new Response();
+          $response->headers->set('Content-Type', 'application/text');
           $response->headers->set('Access-Control-Allow-Origin', '*');
           $response->headers->set('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
+          $response->headers->set('Access-Control-Allow-Headers', 'Content-Type',true);
 
           return $response;
       }
@@ -99,18 +103,22 @@ class BeerControllerAPI extends AbstractController
 
 
     /**
-     * @Route("/api/beers/add_beer", name="api_add_beer", methods={"POST"}))
+     * @Route("/api/beers/add_beer", name="api_add_beer", methods={"GET", "POST", "OPTIONS"})
      */
     public function addBeerAction(Request $request)
     {
-        // just setup a fresh $beer object
+        $response = new Response();
+        $query = array();
+
+        // just setup a fresh object (remove the dummy data)
         if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS')
         {
-            $response = new Response();
-            $response->headers->set('Access-Control-Allow-Origin', '*');
-            $response->headers->set('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
+          $response->headers->set('Content-Type', 'application/text');
+          $response->headers->set('Access-Control-Allow-Origin', '*');
+          $response->headers->set('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
+          $response->headers->set('Access-Control-Allow-Headers', 'Content-Type',true);
 
-            return $response;
+          return $response;
         }
 
         $beer = new Beer();
@@ -126,51 +134,52 @@ class BeerControllerAPI extends AbstractController
 
         $type = $this->getDoctrine()
             ->getRepository(Type::class)
-            ->find($content['id_type']);
+            ->find($content['type_id']);
 
-        if (!$type) {
-          throw $this->createNotFoundException(
-            'No type found for this type id '.$content['id_type']
-            );
-        }
         $beer->setType($type);
 
         $brewery = $this->getDoctrine()
             ->getRepository(Brewery::class)
-            ->find($content['id_brewery']);
-        if (!$brewery) {
-          throw $this->createNotFoundException(
-            'No type found for this brewery id '.$content['id_brewery']
-            );
-        }
+            ->find($content['brewery_id']);
+
         $beer->setBrewery($brewery);
 
-        if (!$beer) {
-            return new Response("Error: beer creation aborted !");
+        if ($beer != null) {
+          $em = $this->getDoctrine()->getManager();
+          $em->persist($beer);
+          $em->flush();
+          $response->setStatusCode('200');
+          $query['status'] = true;
         }
         else {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($beer);
-            $em->flush();
-            return new Response("The beer has been successfully added !");
+          $response->setStatusCode('404');
+          $query['status'] = false;
+          $response->headers->set('Content-Type', 'application/json');
+          $response->setContent(json_encode($query));
         }
+        $response->headers->set('Content-Type', 'application/json');
+        $response->setContent(json_encode($query));
+        return $response;
     }
 
 
     /**
-     * @Route("/api/beers/update_beer/{id}", name="api_update_beer", methods={"PUT"}))
+     * @Route("/api/beers/update_beer/{id}", name="api_update_beer", methods={"GET", "PUT", "OPTIONS"})
      */
     public function updateBeerAction(Request $request, $id)
     {
-        // just setup a fresh $beer object
-        if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS')
-        {
-            $response = new Response();
-            $response->headers->set('Access-Control-Allow-Origin', '*');
-            $response->headers->set('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
+      $response = new Response();
+      $query = array();
+      // just setup a fresh object (remove the dummy data)
+      if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS')
+      {
+          $response->headers->set('Content-Type', 'application/text');
+          $response->headers->set('Access-Control-Allow-Origin', '*');
+          $response->headers->set('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
+          $response->headers->set('Access-Control-Allow-Headers', 'Content-Type',true);
 
-            return $response;
-        }
+          return $response;
+      }
 
         $json = $request->getContent();
         $content = json_decode($json, true);
@@ -188,63 +197,69 @@ class BeerControllerAPI extends AbstractController
 
         $type = $this->getDoctrine()
             ->getRepository(Type::class)
-            ->find($content['id_type']);
+            ->find($content['type_id']);
 
-        if (!$type) {
-          throw $this->createNotFoundException(
-            'No type found for this type id '.$content['id_type']
-            );
-        }
         $beer->setType($type);
 
         $brewery = $this->getDoctrine()
             ->getRepository(Brewery::class)
-            ->find($content['id_brewery']);
-        if (!$brewery) {
-          throw $this->createNotFoundException(
-            'No brewery found for this brewery id '.$content['id_brewery']
-            );
-        }
+            ->find($content['brewery_id']);
+
         $beer->setBrewery($brewery);
 
-        if (!$beer) {
-            return new Response("Error: beer update aborted !");
+        if ($beer != null) {
+          $em = $this->getDoctrine()->getManager();
+          $em->persist($beer);
+          $em->flush();
+          $response->setStatusCode('200');
+          $query['status'] = true;
         }
         else {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($beer);
-            $em->flush();
-            return new Response("The beer has been successfully updated !");
+          $response->setStatusCode('404');
+          $query['status'] = false;
+          $response->headers->set('Content-Type', 'application/json');
+          $response->setContent(json_encode($query));
         }
+        $response->headers->set('Content-Type', 'application/json');
+        $response->setContent(json_encode($query));
+        return $response;
     }
 
 
     /**
-     * @Route("/api/beers/delete_beer/{id}", name="api_delete_beer", methods={"DELETE"}))
+     * @Route("/api/beers/delete_beer/{id}", name="api_delete_beer", methods={"GET", "DELETE", "OPTIONS"})
      */
     public function deleteBeerAction(Request $request, $id)
     {
-        // just setup a fresh $task object (remove the dummy data)
+        $response = new Response();
+        $query = array();
+
+        // just setup a fresh object (remove the dummy data)
         if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS')
         {
-            $response = new Response();
+            $response->headers->set('Content-Type', 'application/text');
             $response->headers->set('Access-Control-Allow-Origin', '*');
             $response->headers->set('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
+            $response->headers->set('Access-Control-Allow-Headers', 'Content-Type',true);
 
             return $response;
         }
 
-        $entityManager = $this->getDoctrine()->getManager();
-        $beer = $entityManager->getRepository(Beer::class)->find($id);
+        if ($id != null) {
+          $entityManager = $this->getDoctrine()->getManager();
+          $beer = $entityManager->getRepository(Beer::class)->find($id);
+          $entityManager->remove($beer);
+          $entityManager->flush();
 
-        if (!$beer) {
-          throw $this->createNotFoundException(
-              'No beer found for this id '.$id
-            );
-          }
+          $response->setStatusCode('200');
+          $query['status'] = true;
+        } else {
+          $response->setStatusCode('404');
+          $query['status'] = false;
+        }
 
-        $entityManager->remove($beer);
-        $entityManager->flush();
-        return new Response("The beer was successfully deleted !");
+        $response->headers->set('Content-Type', 'application/json');
+        $response->setContent(json_encode($query));
+        return $response;
     }
 }

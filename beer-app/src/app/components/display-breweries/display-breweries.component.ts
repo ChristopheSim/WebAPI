@@ -43,19 +43,14 @@ export class DisplayBreweriesComponent implements OnInit {
     this.show = false;
     this.breweryService.deleteBrewery(id).subscribe(
       (data) => {
-        if (data.valid == true) {
-          let i=0;
-          for (i; i<this.breweries.length; i++) {
-            if (this.breweries[i].id == id) {
-              this.breweries.splice(i, 1);
-            }
+        let i=0;
+        for (i; i<this.breweries.length; i++) {
+          if (this.breweries[i].id == id) {
+            this.breweries.splice(i, 1);
           }
+        }
 
-          this.router.navigate(['/breweries']);
-        }
-        else{
-          console.log("error");
-        }
+        this.router.navigate(['/breweries']);
       }
     );
   }

@@ -44,19 +44,14 @@ export class DisplayTypesComponent implements OnInit {
     this.show = false;
     this.typeService.deleteType(id).subscribe(
       (data) => {
-        if (data.valid == true) {
-          let i=0;
-          for (i; i<this.types.length; i++) {
-            if (this.types[i].id == id) {
-              this.types.splice(i, 1);
-            }
+        let i=0;
+        for (i; i<this.types.length; i++) {
+          if (this.types[i].id == id) {
+            this.types.splice(i, 1);
           }
+        }
 
-          this.router.navigate(['/types']);
-        }
-        else{
-          console.log("error");
-        }
+        this.router.navigate(['/types']);
       }
     );
   }

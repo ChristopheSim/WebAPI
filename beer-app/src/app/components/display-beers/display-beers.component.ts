@@ -73,21 +73,14 @@ export class DisplayBeersComponent implements OnInit {
   deleteBeer(id) {
     this.beerService.deleteBeer(id).subscribe(
       (data) => {
-        if (data.valid == true) {
-          let i=0;
-          for (i; i<this.beers.length; i++) {
-            if (this.beers[i].id == id) {
-              this.beers.splice(i, 1);
-            }
+        let i=0;
+        for (i; i<this.beers.length; i++) {
+          if (this.beers[i].id == id) {
+            this.beers.splice(i, 1);
           }
-
-          console.log(this.beers);
-
-          this.router.navigate(['/beers']);
         }
-        else{
-          console.log("error");
-        }
+
+        this.router.navigate(['/beers']);
       }
     );
   }

@@ -27,11 +27,13 @@ class BreweryControllerAPI extends AbstractController
      */
     public function indexAction()
     {
+        // just setup a fresh object (remove the dummy data)
         if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS')
         {
-            $response = new Response();
+            $response->headers->set('Content-Type', 'application/text');
             $response->headers->set('Access-Control-Allow-Origin', '*');
             $response->headers->set('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
+            $response->headers->set('Access-Control-Allow-Headers', 'Content-Type',true);
 
             return $response;
         }
@@ -53,15 +55,17 @@ class BreweryControllerAPI extends AbstractController
     }
 
     /**
-     * @Route("/api/breweries/get_brewery/{id}", name="api_get_brewery", methods={"GET"}))
+     * @Route("/api/breweries/get_brewery/{id}", name="api_get_brewery", methods={"GET"})
      */
     public function getBreweryAction($id)
     {
+      // just setup a fresh object (remove the dummy data)
       if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS')
       {
-          $response = new Response();
+          $response->headers->set('Content-Type', 'application/text');
           $response->headers->set('Access-Control-Allow-Origin', '*');
           $response->headers->set('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
+          $response->headers->set('Access-Control-Allow-Headers', 'Content-Type',true);
 
           return $response;
       }
@@ -99,16 +103,19 @@ class BreweryControllerAPI extends AbstractController
 
 
     /**
-     * @Route("/api/breweries/add_brewery", name="api_add_brewery", methods={"POST"}))
+     * @Route("/api/breweries/add_brewery", name="api_add_brewery", methods={"GET", "POST", "OPTIONS"})
      */
     public function addBreweryAction(Request $request)
     {
-        // just setup a fresh $task object (remove the dummy data)
+        $response = new Response();
+        $query = array();
+        // just setup a fresh object (remove the dummy data)
         if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS')
         {
-            $response = new Response();
+            $response->headers->set('Content-Type', 'application/text');
             $response->headers->set('Access-Control-Allow-Origin', '*');
             $response->headers->set('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
+            $response->headers->set('Access-Control-Allow-Headers', 'Content-Type',true);
 
             return $response;
         }
@@ -122,8 +129,7 @@ class BreweryControllerAPI extends AbstractController
         $brewery->setDescription($content["description"]);
         $brewery->setWebsite($content["website"]);
 
-        $em = $this->getDoctrine()->getManager();
-
+/*
         foreach ($content["beers"] as $beer_id) {
           $beer = $em->getRepository(Beer::class)->find($beer_id);
           if (!$beer) {
@@ -135,29 +141,40 @@ class BreweryControllerAPI extends AbstractController
             $brewery->addBeer($beer);
           }
         }
+*/
 
-        if (!$brewery) {
-            return new Response("Error: brewery creation aborted !");
+        if ($brewery != null) {
+          $em = $this->getDoctrine()->getManager();
+          $em->persist($brewery);
+          $em->flush();
+          $response->setStatusCode('200');
+          $query['status'] = true;
         }
         else {
-            $em->persist($brewery);
-            $em->flush();
-            return new Response("The brewery has been successfully added !");
+          $response->setStatusCode('404');
+          $query['status'] = false;
         }
+        $response->headers->set('Content-Type', 'application/json');
+        $response->setContent(json_encode($query));
+        return $response;
     }
 
 
     /**
-     * @Route("/api/breweries/update_brewery/{id}", name="api_update_brewery", methods={"PUT"}))
+     * @Route("/api/breweries/update_brewery/{id}", name="api_update_brewery", methods={"GET", "PUT", "OPTIONS"})
      */
     public function updateBreweryAction(Request $request, $id)
     {
-        // just setup a fresh $task object (remove the dummy data)
+        $response = new Response();
+        $query = array();
+
+        // just setup a fresh object (remove the dummy data)
         if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS')
         {
-            $response = new Response();
+            $response->headers->set('Content-Type', 'application/text');
             $response->headers->set('Access-Control-Allow-Origin', '*');
             $response->headers->set('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
+            $response->headers->set('Access-Control-Allow-Headers', 'Content-Type',true);
 
             return $response;
         }
@@ -174,7 +191,7 @@ class BreweryControllerAPI extends AbstractController
         $brewery->setWebsite($content["website"]);
 
         $em = $this->getDoctrine()->getManager();
-
+/*
         foreach ($content["beers"] as $beer_id) {
           $beer = $em->getRepository(Beer::class)->find($beer_id);
           if (!$beer) {
@@ -186,44 +203,56 @@ class BreweryControllerAPI extends AbstractController
             $brewery->addBeer($beer);
           }
         }
-
-        if (!$brewery) {
-            return new Response("Error: brewery update aborted !");
+*/
+        if ($brewery != null) {
+          $em = $this->getDoctrine()->getManager();
+          $em->persist($brewery);
+          $em->flush();
+          $response->setStatusCode('200');
+          $query['status'] = true;
         }
         else {
-            $em->persist($brewery);
-            $em->flush();
-            return new Response("The brewery has been successfully updated !");
+          $response->setStatusCode('404');
+          $query['status'] = false;
         }
+        $response->headers->set('Content-Type', 'application/json');
+        $response->setContent(json_encode($query));
+        return $response;
     }
 
 
     /**
-     * @Route("/api/breweries/delete_brewery/{id}", name="api_delete_brewery", methods={"DELETE"}))
+     * @Route("/api/breweries/delete_brewery/{id}", name="api_delete_brewery", methods={"GET", "DELETE", "OPTIONS"})
      */
     public function deleteBreweryAction(Request $request, $id)
     {
-        // just setup a fresh $task object (remove the dummy data)
+        $response = new Response();
+        $query = array();
+        // just setup a fresh object (remove the dummy data)
         if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS')
         {
-            $response = new Response();
+            $response->headers->set('Content-Type', 'application/text');
             $response->headers->set('Access-Control-Allow-Origin', '*');
             $response->headers->set('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
+            $response->headers->set('Access-Control-Allow-Headers', 'Content-Type',true);
 
             return $response;
         }
 
-        $entityManager = $this->getDoctrine()->getManager();
-        $brewery = $entityManager->getRepository(Brewery::class)->find($id);
+        if ($id != null) {
+          $entityManager = $this->getDoctrine()->getManager();
+          $brewery = $entityManager->getRepository(Brewery::class)->find($id);
+          $entityManager->remove($brewery);
+          $entityManager->flush();
+          $response->setStatusCode('200');
+          $query['status'] = true;
+        } else {
+          $response->setStatusCode('404');
+          $query['status'] = false;
+        }
 
-        if (!$brewery) {
-          throw $this->createNotFoundException(
-              'No brewery found for this id '.$id
-            );
-          }
-
-        $entityManager->remove($brewery);
-        $entityManager->flush();
-        return new Response("The brewery was successfully deleted !");
+        $response->headers->set('Content-Type', 'application/json');
+        $response->setContent(json_encode($query));
+        return $response;
     }
 }

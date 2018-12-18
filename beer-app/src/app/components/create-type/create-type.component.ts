@@ -24,12 +24,7 @@ export class CreateTypeComponent implements OnInit {
       if (this.newType.name.length !== 0 && this.newType.description.length !== 0) {
         this.typeService.postType(this.newType).subscribe(
           (data) => {
-            if (data.valid == true) {
-              this.router.navigate(['/types']);
-            }
-            else {
-              document.getElementById('send-error').style.display ='block';
-            }
+            this.router.navigate(['/types']);
           }
         );
       } else {

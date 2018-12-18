@@ -35,11 +35,7 @@ export class ModifyBreweryComponent implements OnInit {
     if (this.brewery.name.length !== 0 && this.brewery.description.length !== 0 && this.brewery.website.length !== 0) {
       this.breweryService.putBrewery(this.brewery.id, this.brewery).subscribe(
         (data) => {
-          if (data.valid === true){
-            this.router.navigate(['/breweries']);
-          } else {
-            document.getElementById('send-error').style.display = "block";
-          }
+          this.router.navigate(['/breweries']);
         }
       );
     } else {
