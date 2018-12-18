@@ -18,7 +18,6 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
-header("Access-Control-Allow-Origin: *");
 
 class TypeControllerAPI extends AbstractController
 {
@@ -51,6 +50,8 @@ class TypeControllerAPI extends AbstractController
         $jsonContent = $serializer->serialize($types,'json');
         $response = new JsonResponse();
         $response->setContent($jsonContent);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
         return $response;
     }
 
@@ -98,6 +99,8 @@ class TypeControllerAPI extends AbstractController
       else {
           $response->setStatusCode('404');
       }
+      $response->headers->set('Content-Type', 'application/json');
+      $response->headers->set('Access-Control-Allow-Origin', '*');
       return $response;
     }
 

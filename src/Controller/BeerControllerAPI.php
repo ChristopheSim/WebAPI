@@ -18,7 +18,6 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
-header("Access-Control-Allow-Origin: *");
 
 class BeerControllerAPI extends AbstractController
 {
@@ -51,6 +50,8 @@ class BeerControllerAPI extends AbstractController
         $jsonContent = $serializer->serialize($beers,'json');
         $response = new JsonResponse();
         $response->setContent($jsonContent);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
         return $response;
     }
 
@@ -98,6 +99,8 @@ class BeerControllerAPI extends AbstractController
       else {
           $response->setStatusCode('404');
       }
+      $response->headers->set('Content-Type', 'application/json');
+      $response->headers->set('Access-Control-Allow-Origin', '*');
       return $response;
     }
 
@@ -154,8 +157,6 @@ class BeerControllerAPI extends AbstractController
         else {
           $response->setStatusCode('404');
           $query['status'] = false;
-          $response->headers->set('Content-Type', 'application/json');
-          $response->setContent(json_encode($query));
         }
         $response->headers->set('Content-Type', 'application/json');
         $response->setContent(json_encode($query));
@@ -217,8 +218,6 @@ class BeerControllerAPI extends AbstractController
         else {
           $response->setStatusCode('404');
           $query['status'] = false;
-          $response->headers->set('Content-Type', 'application/json');
-          $response->setContent(json_encode($query));
         }
         $response->headers->set('Content-Type', 'application/json');
         $response->setContent(json_encode($query));
