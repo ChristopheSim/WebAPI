@@ -137,13 +137,13 @@ class BeerControllerAPI extends AbstractController
 
         $type = $this->getDoctrine()
             ->getRepository(Type::class)
-            ->find($content['type_id']);
+            ->find($content['type']);
 
         $beer->setType($type);
 
         $brewery = $this->getDoctrine()
             ->getRepository(Brewery::class)
-            ->find($content['brewery_id']);
+            ->find($content['brewery']);
 
         $beer->setBrewery($brewery);
 
@@ -158,6 +158,7 @@ class BeerControllerAPI extends AbstractController
           $response->setStatusCode('404');
           $query['status'] = false;
         }
+        $response->headers->set('Access-Control-Allow-Origin', '*');
         $response->headers->set('Content-Type', 'application/json');
         $response->setContent(json_encode($query));
         return $response;
@@ -198,13 +199,13 @@ class BeerControllerAPI extends AbstractController
 
         $type = $this->getDoctrine()
             ->getRepository(Type::class)
-            ->find($content['type_id']);
+            ->find($content['type']);
 
         $beer->setType($type);
 
         $brewery = $this->getDoctrine()
             ->getRepository(Brewery::class)
-            ->find($content['brewery_id']);
+            ->find($content['brewery']);
 
         $beer->setBrewery($brewery);
 
@@ -219,6 +220,7 @@ class BeerControllerAPI extends AbstractController
           $response->setStatusCode('404');
           $query['status'] = false;
         }
+        $response->headers->set('Access-Control-Allow-Origin', '*');
         $response->headers->set('Content-Type', 'application/json');
         $response->setContent(json_encode($query));
         return $response;
@@ -256,7 +258,7 @@ class BeerControllerAPI extends AbstractController
           $response->setStatusCode('404');
           $query['status'] = false;
         }
-
+        $response->headers->set('Access-Control-Allow-Origin', '*');
         $response->headers->set('Content-Type', 'application/json');
         $response->setContent(json_encode($query));
         return $response;

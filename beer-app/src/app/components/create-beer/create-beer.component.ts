@@ -58,8 +58,8 @@ export class CreateBeerComponent implements OnInit {
       'name': this.newBeer.name,
       'description': this.newBeer.description,
       'volume': this.newBeer.volume,
-      'brewery': this.newBeer.brewery,
-      'type': this.newBeer.type
+      'brewery': this.newBeer.brewery.id,
+      'type': this.newBeer.type.id
     };
 
     if (this.newBeer.name !== undefined && this.newBeer.description !== undefined && this.newBeer.volume !== undefined) {

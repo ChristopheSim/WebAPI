@@ -72,13 +72,13 @@ export class ModifyBeerComponent implements OnInit {
       'name': this.beer.name,
       'description': this.beer.description,
       'volume': this.beer.volume,
-      'brewery': this.beer.brewery,
-      'type': this.beer.type
+      'brewery': this.beer.brewery.id,
+      'type': this.beer.type.id
     };
     console.log(this.beer.id, newBeer)
 
-    if (newBeer.name !== undefined && newBeer.description !== undefined && newBeer.volume !== undefined && newBeer.brewery.id !== undefined && newBeer.type.id !== undefined) {
-      if (newBeer.name.length !== 0 && newBeer.description.length !== 0 && newBeer.brewery.name.length !== 0 && newBeer.type.name.length !== 0) {
+    if (newBeer.name !== undefined && newBeer.description !== undefined && newBeer.volume !== undefined) {
+      if (newBeer.name.length !== 0 && newBeer.description.length !== 0) {
         this.beerService.putBeer(this.beer.id, newBeer).subscribe(
           (data) => {
             this.router.navigate(['/beers']);

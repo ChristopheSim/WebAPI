@@ -157,6 +157,7 @@ class BreweryControllerAPI extends AbstractController
           $response->setStatusCode('404');
           $query['status'] = false;
         }
+        $response->headers->set('Access-Control-Allow-Origin', '*');
         $response->headers->set('Content-Type', 'application/json');
         $response->setContent(json_encode($query));
         return $response;
@@ -218,6 +219,7 @@ class BreweryControllerAPI extends AbstractController
           $response->setStatusCode('404');
           $query['status'] = false;
         }
+        $response->headers->set('Access-Control-Allow-Origin', '*');
         $response->headers->set('Content-Type', 'application/json');
         $response->setContent(json_encode($query));
         return $response;
@@ -253,7 +255,7 @@ class BreweryControllerAPI extends AbstractController
           $response->setStatusCode('404');
           $query['status'] = false;
         }
-
+        $response->headers->set('Access-Control-Allow-Origin', '*');
         $response->headers->set('Content-Type', 'application/json');
         $response->setContent(json_encode($query));
         return $response;
