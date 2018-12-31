@@ -26,7 +26,7 @@ class BreweryControllerAPI extends AbstractController
      */
     public function indexAction()
     {
-        // just setup a fresh object (remove the dummy data)
+        // get all breweries
         if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS')
         {
             $response->headers->set('Content-Type', 'application/text');
@@ -36,7 +36,7 @@ class BreweryControllerAPI extends AbstractController
 
             return $response;
         }
-
+        // stop the loop with circular reference
         $normalizer = new ObjectNormalizer();
         $normalizer->setCircularReferenceLimit(1);
         $normalizer->setCircularReferenceHandler(function ($object) {
@@ -45,8 +45,10 @@ class BreweryControllerAPI extends AbstractController
         $encoders = array(new JsonEncoder());
         $normalizers = array($normalizer);
         $serializer = new Serializer($normalizers, $encoders);
+        // get breweries
         $em = $this->getDoctrine()->getManager();
         $breweries = $em->getRepository(Brewery::class)->findAll();
+        // encode the breweries in JSON
         $jsonContent = $serializer->serialize($breweries,'json');
         $response = new JsonResponse();
         $response->setContent($jsonContent);
@@ -60,7 +62,7 @@ class BreweryControllerAPI extends AbstractController
      */
     public function getBreweryAction($id)
     {
-      // just setup a fresh object (remove the dummy data)
+      // get one brewery (id)
       if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS')
       {
           $response->headers->set('Content-Type', 'application/text');
@@ -70,7 +72,7 @@ class BreweryControllerAPI extends AbstractController
 
           return $response;
       }
-
+      // stop the loop with circular reference
       $response = new Response();
       $normalizer = new ObjectNormalizer();
       $normalizer->setCircularReferenceLimit(1);
@@ -81,12 +83,14 @@ class BreweryControllerAPI extends AbstractController
       $encoders = array(new JsonEncoder());
       $normalizers = array($normalizer);
       $serializer = new Serializer($normalizers, $encoders);
+      // get the brewery
       $em = $this->getDoctrine()->getManager();
       if ($id != null) {
           $brewery = $em->getRepository(Brewery::class)
                         ->find($id);
 
           if ($brewery != null) {
+              // encode the brewery in JSON
               $jsonContent = $serializer->serialize($brewery, 'json');
               $response->setContent($jsonContent);
               $response->headers->set('Content-Type', 'application/json');
@@ -110,6 +114,7 @@ class BreweryControllerAPI extends AbstractController
      */
     public function addBreweryAction(Request $request)
     {
+        // add one brewery
         $response = new Response();
         $query = array();
         // just setup a fresh object (remove the dummy data)
@@ -122,31 +127,18 @@ class BreweryControllerAPI extends AbstractController
 
             return $response;
         }
-
+        // create empty object
         $brewery = new Brewery();
-
+        // decode the JSON
         $json = $request->getContent();
         $content = json_decode($json, true);
-
+        // set content of the brewery object
         $brewery->setName($content["name"]);
         $brewery->setDescription($content["description"]);
         $brewery->setWebsite($content["website"]);
 
-/*
-        foreach ($content["beers"] as $beer_id) {
-          $beer = $em->getRepository(Beer::class)->find($beer_id);
-          if (!$beer) {
-            throw $this->createNotFoundException(
-              'No beer found for this beer id '.$beer_id
-            );
-          }
-          else {
-            $brewery->addBeer($beer);
-          }
-        }
-*/
-
         if ($brewery != null) {
+          // save the brewery object
           $em = $this->getDoctrine()->getManager();
           $em->persist($brewery);
           $em->flush();
@@ -169,6 +161,7 @@ class BreweryControllerAPI extends AbstractController
      */
     public function updateBreweryAction(Request $request, $id)
     {
+        // update one brewery (id)
         $response = new Response();
         $query = array();
 
@@ -182,33 +175,22 @@ class BreweryControllerAPI extends AbstractController
 
             return $response;
         }
-
+        // decode the JSON
         $json = $request->getContent();
         $content = json_decode($json, true);
-
+        // find the existing brewery object
         $brewery = $this->getDoctrine()
             ->getRepository(Brewery::class)
             ->find($id);
-
+        // set content of the brewery object
         $brewery->setName($content["name"]);
         $brewery->setDescription($content["description"]);
         $brewery->setWebsite($content["website"]);
 
         $em = $this->getDoctrine()->getManager();
-/*
-        foreach ($content["beers"] as $beer_id) {
-          $beer = $em->getRepository(Beer::class)->find($beer_id);
-          if (!$beer) {
-            throw $this->createNotFoundException(
-              'No beer found for this beer id '.$beer_id
-            );
-          }
-          else {
-            $brewery->addBeer($beer);
-          }
-        }
-*/
+
         if ($brewery != null) {
+          // save the brewery object
           $em = $this->getDoctrine()->getManager();
           $em->persist($brewery);
           $em->flush();
@@ -231,6 +213,7 @@ class BreweryControllerAPI extends AbstractController
      */
     public function deleteBreweryAction(Request $request, $id)
     {
+        // delete one brewery (id)
         $response = new Response();
         $query = array();
         // just setup a fresh object (remove the dummy data)

@@ -26,7 +26,7 @@ class TypeControllerAPI extends AbstractController
      */
     public function indexAction()
     {
-        // just setup a fresh object (remove the dummy data)
+        // get all types
         if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS')
         {
             $response->headers->set('Content-Type', 'application/text');
@@ -36,7 +36,7 @@ class TypeControllerAPI extends AbstractController
 
             return $response;
         }
-
+        // stop the loop with circular reference
         $normalizer = new ObjectNormalizer();
         $normalizer->setCircularReferenceLimit(1);
         $normalizer->setCircularReferenceHandler(function ($object) {
@@ -45,8 +45,10 @@ class TypeControllerAPI extends AbstractController
         $encoders = array(new JsonEncoder());
         $normalizers = array($normalizer);
         $serializer = new Serializer($normalizers, $encoders);
+        // get types
         $em = $this->getDoctrine()->getManager();
         $types = $em->getRepository(Type::class)->findAll();
+        // encode the types in JSON
         $jsonContent = $serializer->serialize($types,'json');
         $response = new JsonResponse();
         $response->setContent($jsonContent);
@@ -60,7 +62,7 @@ class TypeControllerAPI extends AbstractController
      */
     public function getTypeAction($id)
     {
-      // just setup a fresh object (remove the dummy data)
+      // get one type (id)
       if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS')
       {
           $response->headers->set('Content-Type', 'application/text');
@@ -70,7 +72,7 @@ class TypeControllerAPI extends AbstractController
 
           return $response;
       }
-
+      // stop the loop with circular reference
       $response = new Response();
       $normalizer = new ObjectNormalizer();
       $normalizer->setCircularReferenceLimit(1);
@@ -81,12 +83,14 @@ class TypeControllerAPI extends AbstractController
       $encoders = array(new JsonEncoder());
       $normalizers = array($normalizer);
       $serializer = new Serializer($normalizers, $encoders);
+      // get the type
       $em = $this->getDoctrine()->getManager();
       if ($id != null) {
           $type = $em->getRepository(Type::class)
                       ->find($id);
 
           if ($type != null) {
+              // encode the type in JSON
               $jsonContent = $serializer->serialize($type, 'json');
               $response->setContent($jsonContent);
               $response->headers->set('Content-Type', 'application/json');
@@ -109,6 +113,7 @@ class TypeControllerAPI extends AbstractController
      */
     public function addTypeAction(Request $request)
     {
+        // add one type
         $response = new Response();
         $query = array();
         // just setup a fresh object (remove the dummy data)
@@ -121,27 +126,17 @@ class TypeControllerAPI extends AbstractController
 
             return $response;
         }
-
+        // create empty object
         $type = new Type();
-
+        // decode the JSON
         $json = $request->getContent();
         $content = json_decode($json, true);
-
+        // set content of the type object
         $type->setName($content["name"]);
         $type->setDescription($content["description"]);
-/*
-        foreach ($content["beers"] as $beer_id) {
-          $em = $this->getDoctrine()->getManager();
-          $beer = $this->getRepository(Beer::class)->find($beer_id);
-          if (!$beer) {
-            throw $this->createNotFoundException(
-              'No beer found for this beer id '.$beer_id
-            );
-          }
-          $type->addBeer($beer);
-        }
-*/
+
         if ($type != null) {
+          // save the type object
           $em = $this->getDoctrine()->getManager();
           $em->persist($type);
           $em->flush();
@@ -164,6 +159,7 @@ class TypeControllerAPI extends AbstractController
      */
     public function updateTypeAction(Request $request, $id)
     {
+        // update one type (id)
         $response = new Response();
         $query = array();
         // just setup a fresh object (remove the dummy data)
@@ -176,29 +172,19 @@ class TypeControllerAPI extends AbstractController
 
             return $response;
         }
-
+        // decode the JSON
         $json = $request->getContent();
         $content = json_decode($json, true);
-
+        // find the existing type object
         $type = $this->getDoctrine()
             ->getRepository(Type::class)
             ->find($id);
-
+        // set content of the type object
         $type->setName($content["name"]);
         $type->setDescription($content["description"]);
-/*
-        foreach ($content["beers"] as $beer_id) {
-          $em = $this->getDoctrine()->getManager();
-          $beer = $this->getRepository(Beer::class)->find($beer_id);
-          if (!$beer) {
-            throw $this->createNotFoundException(
-              'No beer found for this beer id '.$beer_id
-            );
-          }
-          $type->addBeer($beer);
-        }
-*/
+
         if ($type != null) {
+          // save the type object
           $em = $this->getDoctrine()->getManager();
           $em->persist($type);
           $em->flush();
@@ -220,6 +206,7 @@ class TypeControllerAPI extends AbstractController
      */
     public function deleteTypeAction(Request $request, $id)
     {
+        // delete one type (id)
         $response = new Response();
         $query = array();
         // just setup a fresh object (remove the dummy data)

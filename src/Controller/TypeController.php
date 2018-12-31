@@ -21,6 +21,7 @@ class TypeController extends AbstractController
      */
     public function indexAction()
     {
+        // find all types of beers
         $types = $this->getDoctrine()->getRepository(Type::class)->findAll();
         return $this->render('type/index.html.twig', [
             'controller_name' => 'TypeController',
@@ -31,9 +32,9 @@ class TypeController extends AbstractController
     /**
      * @Route("/types/add_type", name="add_type")
      */
-    public function addTypeAction(Request $request)
+    public function addTypeAction(Request $request)just setup a fresh $task object (remove the dummy data)
     {
-        // just setup a fresh $task object (remove the dummy data)
+        // create an empty type object
         $type = new Type();
 
         $form = $this->createForm(TypeType::class, $type);
@@ -45,6 +46,7 @@ class TypeController extends AbstractController
           $em = $this->getDoctrine()->getManager();
           $em->persist($task);
           $em->flush();
+          // add a flash message
           $this->addFlash(
             'notice',
             'The type has been successfully added !'
@@ -61,20 +63,20 @@ class TypeController extends AbstractController
      */
     public function updateTypeAction(Request $request, $id)
     {
-        // just setup a fresh $task object (remove the dummy data)
+        // find the type object
         $entityManager = $this->getDoctrine()->getManager();
         $type = $entityManager->getRepository(Type::class)->find($id);
-
+        // create a form with the type data
         if (!$type) {
           throw $this->createNotFoundException(
               'No type found for this id '.$id
             );
         }
         $form = $this->createForm(TypeType::class, $type);
-
+        // get data from the form
         $form->handleRequest($request);
         $task = $form->getData();
-
+        // get data from the form
         if ($form->isSubmitted() && $form->isValid()) {
           $entityManager = $this->getDoctrine()->getManager();
           $entityManager->persist($task);
@@ -93,7 +95,7 @@ class TypeController extends AbstractController
      */
     public function deleteTypeAction(Request $request, $id)
     {
-        // just setup a fresh $task object (remove the dummy data)
+        // find the type object
         $entityManager = $this->getDoctrine()->getManager();
         $type = $entityManager->getRepository(Type::class)->find($id);
 
@@ -101,8 +103,8 @@ class TypeController extends AbstractController
           throw $this->createNotFoundException(
               'No type found for this id '.$id
             );
-          }
-
+        }
+        // delete the type
         $entityManager->remove($type);
         $entityManager->flush();
         $this->addFlash(

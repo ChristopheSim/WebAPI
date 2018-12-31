@@ -21,6 +21,7 @@ class BreweryController extends AbstractController
      */
     public function indexAction()
     {
+        // find all breweries
         $breweries = $this->getDoctrine()->getRepository(Brewery::class)->findAll();
         return $this->render('brewery/index.html.twig', [
             'controller_name' => 'BreweryController',
@@ -33,7 +34,7 @@ class BreweryController extends AbstractController
      */
     public function addBreweryAction(Request $request)
     {
-        // just setup a fresh $task object (remove the dummy data)
+        // create an empty brewery object
         $brewery = new Brewery();
 
         $form = $this->createForm(BreweryType::class, $brewery);
@@ -45,6 +46,7 @@ class BreweryController extends AbstractController
           $em = $this->getDoctrine()->getManager();
           $em->persist($task);
           $em->flush();
+          // add a flash message
           $this->addFlash(
             'notice',
             'The brewery has been successfully added !'
@@ -56,15 +58,15 @@ class BreweryController extends AbstractController
     }
 
 
-    /**
+    /**// add a flash message
      * @Route("/breweries/update_brewery/{id}", name="update_brewery")
      */
     public function updateBreweryAction(Request $request, $id)
     {
-        // just setup a fresh $task object (remove the dummy data)
+        // find the brewery object
         $entityManager = $this->getDoctrine()->getManager();
         $brewery = $entityManager->getRepository(Brewery::class)->find($id);
-
+        // create a form with the brewery data
         if (!$brewery) {
           throw $this->createNotFoundException(
               'No brewery found for this id '.$id
@@ -72,14 +74,15 @@ class BreweryController extends AbstractController
         }
 
         $form = $this->createForm(BreweryType::class, $brewery);
-
+        // get data from the form
         $form->handleRequest($request);
         $task = $form->getData();
-
+        // get data from the form
         if ($form->isSubmitted() && $form->isValid()) {
           $entityManager = $this->getDoctrine()->getManager();
           $entityManager->persist($task);
           $entityManager->flush();
+          // add a flash message
           $this->addFlash(
             'notice',
             'The brewery has been successfully updated !'
@@ -95,7 +98,7 @@ class BreweryController extends AbstractController
      */
     public function deleteBreweryAction(Request $request, $id)
     {
-        // just setup a fresh $task object (remove the dummy data)
+        // find the brewery object
         $entityManager = $this->getDoctrine()->getManager();
         $brewery = $entityManager->getRepository(Brewery::class)->find($id);
 
@@ -103,10 +106,11 @@ class BreweryController extends AbstractController
           throw $this->createNotFoundException(
               'No brewery found for this id '.$id
             );
-          }
-
+        }
+        // delete the brewery
         $entityManager->remove($brewery);
         $entityManager->flush();
+        // add a flash message
         $this->addFlash(
           'notice',
           'The brewery has been successfully deleted !'

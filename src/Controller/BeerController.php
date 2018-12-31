@@ -21,6 +21,7 @@ class BeerController extends AbstractController
      */
     public function indexAction()
     {
+        // find all beers
         $beers = $this->getDoctrine()->getRepository(Beer::class)->findAll();
         return $this->render('beer/index.html.twig', [
             'controller_name' => 'BeerController',
@@ -33,18 +34,19 @@ class BeerController extends AbstractController
      */
     public function addBeerAction(Request $request)
     {
-        // just setup a fresh $task object (remove the dummy data)
+        // create an empty beer object
         $beer = new Beer();
-
+        // create an empty form
         $form = $this->createForm(BeerType::class, $beer);
-
+        // get data from the form
         $form->handleRequest($request);
         $task = $form->getData();
-
+        // save the beer
         if ($form->isSubmitted() && $form->isValid()) {
           $em = $this->getDoctrine()->getManager();
           $em->persist($task);
           $em->flush();
+          // add a flash message
           $this->addFlash(
             'notice',
             'The beer has been successfully added !'
@@ -61,24 +63,25 @@ class BeerController extends AbstractController
      */
     public function updateBeerAction(Request $request, $id)
     {
-        // just setup a fresh $task object (remove the dummy data)
+        // find the beer object
         $entityManager = $this->getDoctrine()->getManager();
         $beer = $entityManager->getRepository(Beer::class)->find($id);
-
+        // create a form with the beer data
         if (!$beer) {
           throw $this->createNotFoundException(
               'No beer found for this id '.$id
             );
         }
         $form = $this->createForm(BeerType::class, $beer);
-
+        // get data from the form
         $form->handleRequest($request);
         $task = $form->getData();
-
+        // get data from the form
         if ($form->isSubmitted() && $form->isValid()) {
           $entityManager = $this->getDoctrine()->getManager();
           $entityManager->persist($task);
           $entityManager->flush();
+          // add a flash message
           $this->addFlash(
             'notice',
             'The beer has been successfully updated !'
@@ -94,7 +97,7 @@ class BeerController extends AbstractController
      */
     public function deleteBeerAction(Request $request, $id)
     {
-        // just setup a fresh $task object (remove the dummy data)
+        // find the beer object
         $entityManager = $this->getDoctrine()->getManager();
         $beer = $entityManager->getRepository(Beer::class)->find($id);
 
@@ -102,10 +105,11 @@ class BeerController extends AbstractController
           throw $this->createNotFoundException(
               'No beers found for this id '.$id
             );
-          }
-
+        }
+        // delete the beer
         $entityManager->remove($beer);
         $entityManager->flush();
+        // add a flash message
         $this->addFlash(
           'notice',
           'The beer has been successfully deleted !'
