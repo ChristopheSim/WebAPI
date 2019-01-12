@@ -58,7 +58,7 @@ class BreweryController extends AbstractController
     }
 
 
-    /**// add a flash message
+    /**
      * @Route("/breweries/update_brewery/{id}", name="update_brewery")
      */
     public function updateBreweryAction(Request $request, $id)

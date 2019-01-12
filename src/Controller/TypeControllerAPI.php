@@ -109,7 +109,7 @@ class TypeControllerAPI extends AbstractController
     }
 
     /**
-     * @Route("/api/types/add_type", name="api_add_type", methods={"GET", "POST", "OPTIONS"})
+     * @Route("/api/types/add_type", name="api_add_type", methods={"POST", "OPTIONS"})
      */
     public function addTypeAction(Request $request)
     {
@@ -155,7 +155,7 @@ class TypeControllerAPI extends AbstractController
 
 
     /**
-     * @Route("/api/types/update_type/{id}", name="api_update_type", methods={"GET", "PUT", "OPTIONS"})
+     * @Route("/api/types/update_type/{id}", name="api_update_type", methods={"PUT", "OPTIONS"})
      */
     public function updateTypeAction(Request $request, $id)
     {
@@ -202,7 +202,7 @@ class TypeControllerAPI extends AbstractController
     }
 
     /**
-     * @Route("/api/types/delete_type/{id}", name="api_delete_type", methods={"GET", "DELETE", "OPTIONS"})
+     * @Route("/api/types/delete_type/{id}", name="api_delete_type", methods={"DELETE", "OPTIONS"})
      */
     public function deleteTypeAction(Request $request, $id)
     {

@@ -32,7 +32,7 @@ class TypeController extends AbstractController
     /**
      * @Route("/types/add_type", name="add_type")
      */
-    public function addTypeAction(Request $request)just setup a fresh $task object (remove the dummy data)
+    public function addTypeAction(Request $request)
     {
         // create an empty type object
         $type = new Type();

@@ -110,7 +110,7 @@ class BeerControllerAPI extends AbstractController
 
 
     /**
-     * @Route("/api/beers/add_beer", name="api_add_beer", methods={"GET", "POST", "OPTIONS"})
+     * @Route("/api/beers/add_beer", name="api_add_beer", methods={"POST", "OPTIONS"})
      */
     public function addBeerAction(Request $request)
     {
@@ -170,7 +170,7 @@ class BeerControllerAPI extends AbstractController
 
 
     /**
-     * @Route("/api/beers/update_beer/{id}", name="api_update_beer", methods={"GET", "PUT", "OPTIONS"})
+     * @Route("/api/beers/update_beer/{id}", name="api_update_beer", methods={"PUT", "OPTIONS"})
      */
     public function updateBeerAction(Request $request, $id)
     {
@@ -232,7 +232,7 @@ class BeerControllerAPI extends AbstractController
 
 
     /**
-     * @Route("/api/beers/delete_beer/{id}", name="api_delete_beer", methods={"GET", "DELETE", "OPTIONS"})
+     * @Route("/api/beers/delete_beer/{id}", name="api_delete_beer", methods={"DELETE", "OPTIONS"})
      */
     public function deleteBeerAction(Request $request, $id)
     {
